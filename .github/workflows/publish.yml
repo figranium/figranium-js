@@ -1,0 +1,42 @@
+name: Publish package to npm
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Verify and publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify package
+        run: npm run check
+
+      - name: Publish with provenance
+        run: npm publish --access public --provenance
+        # Bootstrap only: NPM_TOKEN is needed for the first publish, before npm
+        # allows a trusted publisher to be configured. OIDC takes precedence
+        # after trusted publishing is enabled, so the secret can then be removed.
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

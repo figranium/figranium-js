@@ -5,6 +5,14 @@
   "keywords": ["figranium", "browser-automation", "web-scraping", "sdk"],
   "license": "Apache-2.0",
   "author": "Figranium",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/figranium/figranium-js.git"
+  },
+  "homepage": "https://github.com/figranium/figranium-js#readme",
+  "bugs": {
+    "url": "https://github.com/figranium/figranium-js/issues"
+  },
   "type": "module",
   "sideEffects": false,
   "files": ["dist", "docs", "examples", "README.md", "LICENSE", "CHANGELOG.md"],
@@ -24,6 +32,10 @@
     }
   },
   "engines": { "node": ">=18" },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
