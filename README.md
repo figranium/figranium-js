@@ -1,6 +1,6 @@
 # @figranium/sdk
 
-Official TypeScript and JavaScript SDK for [Figranium](https://figranium.dev), the self-hosted browser automation and web scraping platform.
+Official TypeScript and JavaScript SDK for [Figranium](https://github.com/figranium/figranium), the self-hosted browser automation and web scraping platform.
 
 - TypeScript-first, with complete declaration files
 - Works in Node.js 18+ and modern browsers
