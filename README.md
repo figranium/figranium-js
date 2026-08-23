@@ -1,5 +1,7 @@
 # @figranium/sdk
 
+[![npm version](https://img.shields.io/npm/v/%40figranium%2Fsdk.svg)](https://www.npmjs.com/package/@figranium/sdk)
+
 Official TypeScript and JavaScript SDK for [Figranium](https://github.com/figranium/figranium), the self-hosted browser automation and web scraping platform.
 
 - TypeScript-first, with complete declaration files
