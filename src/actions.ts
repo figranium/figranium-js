@@ -40,6 +40,8 @@ export const actions = {
   start: (taskId: string, base?: ActionBase) => action({ ...base, type: "start", value: taskId }),
   solveCaptcha: (input: Extract<Action, { type: "solve_captcha" }> extends infer A ? Omit<A & object, "id" | "type"> : never = {}, base?: ActionBase) =>
     action({ ...base, type: "solve_captcha", ...input }),
+  waitForCaptcha: (input: Extract<Action, { type: "wait_captcha" }> extends infer A ? Omit<A & object, "id" | "type"> : never = {}, base?: ActionBase) =>
+    action({ ...base, type: "wait_captcha", ...input }),
 };
 
 function nextActionId(type: Action["type"]): string {

@@ -77,6 +77,21 @@ const result = await figranium.runTask(saved.id!, {
 
 `variable("query")` produces Figranium’s required `{$query}` syntax. The action helpers generate stable unique action IDs. You can also pass plain typed action objects when you need every field exposed by the task specification.
 
+CAPTCHA-aware tasks can wait for an interactable challenge without clicking it, then solve it in a separate action:
+
+```ts
+actions.waitForCaptcha({
+  captchaType: "turnstile",
+  selector: "#challenge",
+  timeout: 120_000,
+  varName: "captchaReady",
+});
+
+actions.solveCaptcha({ captchaType: "turnstile", timeout: 120_000 });
+```
+
+`waitForCaptcha()` only waits for the checkbox or equivalent provider control to become ready. Its result is available through `block.output` and, when supplied, `varName`.
+
 ## Stream executions
 
 ```ts

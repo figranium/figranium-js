@@ -66,6 +66,13 @@ export type Action =
       selector?: string;
       varName?: string;
       timeout?: number;
+    })
+  | (ActionBase & {
+      type: "wait_captcha";
+      captchaType?: CaptchaType;
+      selector?: string;
+      varName?: string;
+      timeout?: number;
     });
 
 export type StringConditionOperator =

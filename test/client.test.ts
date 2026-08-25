@@ -135,4 +135,21 @@ describe("action helpers", () => {
   it("keeps caller-supplied IDs", () => {
     expect(actions.click("#submit", { id: "submit" }).id).toBe("submit");
   });
+
+  it("creates a typed wait_captcha readiness action", () => {
+    expect(actions.waitForCaptcha({
+      captchaType: "turnstile",
+      selector: "#challenge",
+      timeout: 120_000,
+      varName: "captchaReady",
+    }, { id: "wait-captcha" })).toEqual({
+      id: "wait-captcha",
+      type: "wait_captcha",
+      captchaType: "turnstile",
+      selector: "#challenge",
+      timeout: 120_000,
+      varName: "captchaReady",
+    });
+    expect(actions.waitForCaptcha().type).toBe("wait_captcha");
+  });
 });
