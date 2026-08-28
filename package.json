@@ -1,6 +1,6 @@
 {
   "name": "@figranium/sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Official TypeScript and JavaScript SDK for the Figranium API",
   "keywords": ["figranium", "browser-automation", "web-scraping", "sdk"],
   "license": "Apache-2.0",
