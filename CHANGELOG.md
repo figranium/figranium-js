@@ -2,6 +2,10 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
+## Unreleased
+
+- Added the typed `TaskOutcome` contract to execution results, execution history, and schedule metadata.
+
 ## 0.1.1 - 2026-08-25
 
 - Added the typed `wait_captcha` action with optional CAPTCHA provider, selector scope, timeout, and result variable fields.

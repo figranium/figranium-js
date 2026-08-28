@@ -4,6 +4,7 @@ export type JsonObject = { [key: string]: JsonValue };
 export type UnknownRecord = Record<string, unknown>;
 
 export type TaskMode = "scrape" | "agent" | "headful";
+export type TaskOutcome = "success" | "error" | "stopped" | "crashed" | "anti_bot";
 export type VariableType = "string" | "number" | "boolean";
 export type ExtractionFormat = "json" | "csv";
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -121,6 +122,10 @@ export interface Schedule {
   daysOfWeek?: number[];
   dayOfMonth?: number;
   cron?: string;
+  lastRun?: number;
+  lastRunStatus?: TaskOutcome;
+  lastRunDurationMs?: number;
+  nextRun?: number;
 }
 
 export interface TaskOutput {
@@ -181,6 +186,7 @@ export interface ExecuteTaskOptions extends UnknownRecord {
 
 export interface ExecutionResult<T = unknown> extends UnknownRecord {
   data?: T;
+  outcome?: TaskOutcome;
   success?: boolean;
   error?: string;
   runId?: string;
@@ -192,6 +198,7 @@ export interface Execution<T = unknown> extends UnknownRecord {
   method?: string;
   path?: string;
   status?: string;
+  outcome?: TaskOutcome;
   durationMs?: number;
   source?: string;
   mode?: TaskMode | string;

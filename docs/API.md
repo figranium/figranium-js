@@ -9,6 +9,8 @@ All methods return promises unless marked as a stream. The final optional argume
 - `agent(input)`
 - `headful(input)`
 
+Agent and scrape execution results include an `outcome` of `success`, `error`, `stopped`, `crashed`, or `anti_bot`. Classified runtime outcomes are completed responses; inspect `result.outcome` instead of relying only on HTTP status.
+
 ## Tasks
 
 - `tasks.list()`

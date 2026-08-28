@@ -29,7 +29,7 @@ describe("Figranium client", () => {
   });
 
   it("serializes execution inputs and safely encodes path parameters", async () => {
-    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ success: true, data: [1] }));
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ success: true, outcome: "anti_bot", data: [1] }));
     const client = new Figranium({ apiKey: "secret", fetch: fetcher });
 
     const result = await client.runTask<number[]>("task/a", { variables: { query: "books" }, runId: "run-1" });
@@ -38,6 +38,7 @@ describe("Figranium client", () => {
     expect(url).toBe("http://localhost:11345/tasks/task%2Fa/api");
     expect(JSON.parse(String(init?.body))).toEqual({ variables: { query: "books" }, runId: "run-1" });
     expect(result.data).toEqual([1]);
+    expect(result.outcome).toBe("anti_bot");
   });
 
   it("preserves server diagnostics in FigraniumError", async () => {

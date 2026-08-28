@@ -33,6 +33,7 @@ const result = await figranium.runTask(tasks[0].id, {
 });
 
 console.log(result.data);
+console.log(result.outcome); // success | error | stopped | crashed | anti_bot
 ```
 
 The same API works from CommonJS:
