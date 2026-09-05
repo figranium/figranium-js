@@ -2,6 +2,7 @@ import { HttpClient } from "./http";
 import {
   AuthResource,
   BrowserResource,
+  CabinetsResource,
   CapturesResource,
   CredentialsResource,
   ExecutionResource,
@@ -19,6 +20,7 @@ export class Figranium {
   readonly executions: ExecutionsResource;
   readonly schedules: SchedulesResource;
   readonly captures: CapturesResource;
+  readonly cabinets: CabinetsResource;
   readonly credentials: CredentialsResource;
   readonly browser: BrowserResource;
   readonly settings: SettingsResource;
@@ -32,6 +34,7 @@ export class Figranium {
     this.executions = new ExecutionsResource(http);
     this.schedules = new SchedulesResource(http);
     this.captures = new CapturesResource(http);
+    this.cabinets = new CabinetsResource(http);
     this.credentials = new CredentialsResource(http);
     this.browser = new BrowserResource(http);
     this.settings = new SettingsResource(http);

@@ -42,6 +42,9 @@ export const actions = {
     action({ ...base, type: "solve_captcha", ...input }),
   waitForCaptcha: (input: Extract<Action, { type: "wait_captcha" }> extends infer A ? Omit<A & object, "id" | "type"> : never = {}, base?: ActionBase) =>
     action({ ...base, type: "wait_captcha", ...input }),
+  upload: (input: Extract<Action, { type: "upload" }> extends infer A ? Omit<A & object, "id" | "type"> : never = {}, base?: ActionBase) =>
+    action({ ...base, type: "upload", ...input }),
+  finalizeUploads: (base?: ActionBase) => action({ ...base, type: "finalize_uploads" }),
 };
 
 function nextActionId(type: Action["type"]): string {

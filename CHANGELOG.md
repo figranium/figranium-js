@@ -2,9 +2,12 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
-## Unreleased
+## 0.2.0 - 2026-09-05
 
 - Added the typed `TaskOutcome` contract to execution results, execution history, and schedule metadata.
+- Added a `CabinetsResource` (`client.cabinets`) for listing, creating, renaming, and deleting Cabinets, managing their items (list, clear, set status, remove, zip, unzip), and building item download URLs.
+- Added the typed `upload` and `finalize_uploads` actions with `cabinetId`/`markAsUploaded` fields, plus `actions.upload()` and `actions.finalizeUploads()` helpers.
+- Added the optional `cabinetId` field to `Task` for per-Task download Cabinet selection.
 
 ## 0.1.1 - 2026-08-25
 

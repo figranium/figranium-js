@@ -74,7 +74,14 @@ export type Action =
       selector?: string;
       varName?: string;
       timeout?: number;
-    });
+    })
+  | (ActionBase & {
+      type: "upload";
+      selector?: string;
+      cabinetId?: string;
+      markAsUploaded?: boolean;
+    })
+  | (ActionBase & { type: "finalize_uploads" });
 
 export type StringConditionOperator =
   | "equals"
@@ -159,6 +166,7 @@ export interface Task {
   includeShadowDom?: boolean;
   disableRecording?: boolean;
   statelessExecution?: boolean;
+  cabinetId?: string;
   versions?: TaskVersion[];
   last_opened?: number;
   [key: string]: unknown;
@@ -213,6 +221,26 @@ export interface ScheduleEntry {
   taskName: string;
   mode: TaskMode | string;
   schedule: Schedule;
+}
+
+export interface Cabinet {
+  id: string;
+  name: string;
+  isDefault?: boolean;
+  itemCount?: number;
+  createdAt?: number;
+}
+
+export type CabinetItemKind = "file" | "zip" | "folder";
+export type CabinetItemStatus = "pending" | "uploaded";
+
+export interface CabinetItem {
+  id: string;
+  name: string;
+  kind: CabinetItemKind;
+  status: CabinetItemStatus;
+  size?: number;
+  createdAt?: number;
 }
 
 export interface Capture {

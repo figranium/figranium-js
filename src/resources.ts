@@ -1,6 +1,9 @@
 import { HttpClient, pathId } from "./http";
 import type {
   BrowserSession,
+  Cabinet,
+  CabinetItem,
+  CabinetItemStatus,
   Capture,
   Credential,
   CredentialInput,
@@ -233,6 +236,66 @@ export class CapturesResource {
 
   clearCookies(options?: RequestOptions) {
     return this.http.request<{ success: boolean }>("POST", "/api/data/clear-cookies", options);
+  }
+}
+
+export class CabinetsResource {
+  constructor(private readonly http: HttpClient) {}
+
+  list(options?: RequestOptions) {
+    return this.http.request<Cabinet[]>("GET", "/api/cabinets", options);
+  }
+
+  create(name: string, options?: RequestOptions) {
+    return this.http.request<Cabinet>("POST", "/api/cabinets", { ...options, body: { name } });
+  }
+
+  rename(cabinetId: string, name: string, options?: RequestOptions) {
+    return this.http.request<Cabinet>("PATCH", `/api/cabinets/${pathId(cabinetId)}`, { ...options, body: { name } });
+  }
+
+  delete(cabinetId: string, input: { targetCabinetId?: string; migrate?: boolean } = {}, options?: RequestOptions) {
+    return this.http.request<{ success: boolean }>("DELETE", `/api/cabinets/${pathId(cabinetId)}`, {
+      ...options,
+      body: { targetCabinetId: input.targetCabinetId, mode: input.migrate ? "migrate" : undefined },
+    });
+  }
+
+  listItems(cabinetId: string, options?: RequestOptions) {
+    return this.http.request<{ items: CabinetItem[] }>("GET", `/api/cabinets/${pathId(cabinetId)}/items`, options);
+  }
+
+  clear(cabinetId: string, options?: RequestOptions) {
+    return this.http.request<{ success: boolean }>("POST", `/api/cabinets/${pathId(cabinetId)}/clear`, options);
+  }
+
+  setItemStatus(cabinetId: string, itemIds: string[], status: CabinetItemStatus, options?: RequestOptions) {
+    return this.http.request<{ items: CabinetItem[] }>("PATCH", `/api/cabinets/${pathId(cabinetId)}/items/status`, {
+      ...options,
+      body: { itemIds, status },
+    });
+  }
+
+  removeItems(cabinetId: string, itemIds: string[], options?: RequestOptions) {
+    return this.http.request<{ success: boolean }>("DELETE", `/api/cabinets/${pathId(cabinetId)}/items`, {
+      ...options,
+      body: { itemIds },
+    });
+  }
+
+  zipItems(cabinetId: string, itemIds: string[], name?: string, options?: RequestOptions) {
+    return this.http.request<CabinetItem>("POST", `/api/cabinets/${pathId(cabinetId)}/zip`, {
+      ...options,
+      body: { itemIds, name },
+    });
+  }
+
+  unzipItem(cabinetId: string, itemId: string, options?: RequestOptions) {
+    return this.http.request<{ items: CabinetItem[] }>("POST", `/api/cabinets/${pathId(cabinetId)}/items/${pathId(itemId)}/unzip`, options);
+  }
+
+  getItemDownloadUrl(cabinetId: string, itemId: string): string {
+    return `${this.http.baseUrl}/api/cabinets/${pathId(cabinetId)}/items/${pathId(itemId)}/download`;
   }
 }
 
