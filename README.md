@@ -170,10 +170,6 @@ const figranium = new Figranium({
 });
 ```
 
-## Compatibility
-
-This release is modeled against Figranium API `0.14.4` and the accompanying `AGENT_SPEC.md`. Unknown fields are preserved through flexible task and result types so newer servers can add response data without breaking SDK consumers.
-
 ## License
 
 Apache-2.0
