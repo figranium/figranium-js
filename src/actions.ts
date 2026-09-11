@@ -1,4 +1,4 @@
-import type { Action, ActionBase, ConditionAction, HttpMethod } from "./types";
+import type { Action, ActionBase, ClickType, ConditionAction, HttpMethod } from "./types";
 
 let sequence = 0;
 
@@ -13,7 +13,17 @@ export function action<T extends Action>(input: T): T {
 
 export const actions = {
   navigate: (url: string, base?: ActionBase) => action({ ...base, type: "navigate", value: url }),
-  click: (selector: string, base?: ActionBase) => action({ ...base, type: "click", selector }),
+  click: (selector: string, clickTypeOrBase: ClickType | ActionBase = "single", base?: ActionBase) => {
+    const clickType = typeof clickTypeOrBase === "string" ? clickTypeOrBase : "single";
+    const actionBase = typeof clickTypeOrBase === "string" ? base : clickTypeOrBase;
+    return action({ ...actionBase, type: "click", selector, ...(clickType === "single" ? {} : { clickType }) });
+  },
+  check: (selector: string, base?: ActionBase) => action({ ...base, type: "check", selector }),
+  uncheck: (selector: string, base?: ActionBase) => action({ ...base, type: "uncheck", selector }),
+  dragAndDrop: (selector: string, targetSelector: string, base?: ActionBase) =>
+    action({ ...base, type: "drag_and_drop", selector, targetSelector }),
+  reload: (base?: ActionBase) => action({ ...base, type: "reload" }),
+  select: (selector: string, value: string, base?: ActionBase) => action({ ...base, type: "select", selector, value }),
   type: (selector: string, value: string, mode: "replace" | "append" = "replace", base?: ActionBase) =>
     action({ ...base, type: "type", selector, value, typeMode: mode }),
   wait: (seconds: number, base?: ActionBase) => action({ ...base, type: "wait", value: String(seconds) }),
@@ -35,6 +45,7 @@ export const actions = {
   while: (condition: Omit<ConditionAction<"while">, "id" | "type">, base?: ActionBase) => action({ ...base, type: "while", ...condition }),
   else: (base?: ActionBase) => action({ ...base, type: "else" }),
   end: (base?: ActionBase) => action({ ...base, type: "end" }),
+  doNothing: (base?: ActionBase) => action({ ...base, type: "do_nothing" }),
   repeat: (count: number, base?: ActionBase) => action({ ...base, type: "repeat", value: String(count) }),
   stop: (status = "success", base?: ActionBase) => action({ ...base, type: "stop", value: status }),
   start: (taskId: string, base?: ActionBase) => action({ ...base, type: "start", value: taskId }),

@@ -93,6 +93,24 @@ actions.solveCaptcha({ captchaType: "turnstile", timeout: 120_000 });
 
 `waitForCaptcha()` only waits for the checkbox or equivalent provider control to become ready. Its result is available through `block.output` and, when supplied, `varName`.
 
+## Browser interaction helpers
+
+The SDK also exposes typed helpers for native browser interactions, including checkbox state, drag-and-drop, page reloads, option selection, and click modes:
+
+```ts
+actions.check("#terms");
+actions.click(".file-row", "double");
+actions.dragAndDrop(".backlog-card", ".done-column");
+actions.reload();
+actions.select("#language", "en");
+```
+
+Tasks can opt into rendered-page translation for Agent and headful runs. It is disabled by default:
+
+```ts
+translation: { enabled: true, targetLanguage: "spanish" }
+```
+
 ## Stream executions
 
 ```ts

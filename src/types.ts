@@ -9,6 +9,7 @@ export type VariableType = "string" | "number" | "boolean";
 export type ExtractionFormat = "json" | "csv";
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type CaptchaType = "recaptcha_v2" | "recaptcha_v3" | "hcaptcha" | "turnstile";
+export type ClickType = "single" | "double" | "right";
 
 export interface TaskVariable<T = unknown> {
   type: VariableType;
@@ -30,7 +31,12 @@ export interface SelectorAction extends ActionBase {
 
 export type Action =
   | (ActionBase & { type: "navigate"; value: string })
-  | (SelectorAction & { type: "click" })
+  | (SelectorAction & { type: "click"; clickType?: ClickType })
+  | (SelectorAction & { type: "check" })
+  | (SelectorAction & { type: "uncheck" })
+  | (SelectorAction & { type: "drag_and_drop"; targetSelector: string })
+  | (ActionBase & { type: "reload" })
+  | (SelectorAction & { type: "select"; value: string })
   | (SelectorAction & { type: "type"; value: string; typeMode?: "append" | "replace" })
   | (ActionBase & { type: "wait"; value: string })
   | (SelectorAction & { type: "wait_selector"; value?: string })
@@ -51,6 +57,7 @@ export type Action =
   | (ActionBase & { type: "stop"; value?: string })
   | (ActionBase & { type: "set"; varName: string; value: string })
   | (ActionBase & { type: "on_error"; value?: string })
+  | (ActionBase & { type: "do_nothing" })
   | (ActionBase & { type: "start"; value: string })
   | (ActionBase & {
       type: "http_request";
@@ -120,6 +127,11 @@ export interface StealthConfig {
   randomizeClicks?: boolean;
 }
 
+export interface TaskTranslation {
+  enabled: boolean;
+  targetLanguage: string;
+}
+
 export interface Schedule {
   enabled: boolean;
   frequency?: "interval" | "hourly" | "daily" | "weekly" | "monthly";
@@ -156,6 +168,7 @@ export interface Task {
   humanTyping?: boolean;
   stealth?: StealthConfig;
   autoSolveCaptcha?: boolean;
+  translation?: TaskTranslation;
   actions?: Action[];
   variables?: TaskVariables;
   schedule?: Schedule;
@@ -166,6 +179,9 @@ export interface Task {
   includeShadowDom?: boolean;
   disableRecording?: boolean;
   statelessExecution?: boolean;
+  /** Cabinet used to receive downloads intercepted during this Task. */
+  downloadCabinetId?: string;
+  /** @deprecated Use `downloadCabinetId`. */
   cabinetId?: string;
   versions?: TaskVersion[];
   last_opened?: number;
@@ -232,7 +248,7 @@ export interface Cabinet {
 }
 
 export type CabinetItemKind = "file" | "zip" | "folder";
-export type CabinetItemStatus = "pending" | "uploaded";
+export type CabinetItemStatus = "unuploaded" | "uploaded";
 
 export interface CabinetItem {
   id: string;
@@ -241,6 +257,8 @@ export interface CabinetItem {
   status: CabinetItemStatus;
   size?: number;
   createdAt?: number;
+  sourceTaskId?: string;
+  sourceRunId?: string;
 }
 
 export interface Capture {

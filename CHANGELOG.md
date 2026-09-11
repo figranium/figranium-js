@@ -2,6 +2,15 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
+## 0.3.0 - 2026-09-11
+
+- Added typed `check`, `uncheck`, `drag_and_drop`, and `reload` actions, with `actions.check()`, `actions.uncheck()`, `actions.dragAndDrop()`, and `actions.reload()` helpers.
+- Added `clickType` support for single, double, and right-click interactions through `actions.click(selector, clickType?)`.
+- Added the existing native `select` and `do_nothing` actions to the public action union and helpers.
+- Added the Task-level `translation` contract for opt-in rendered-page translation in Agent and headful runs.
+- Corrected the Task download Cabinet field to `downloadCabinetId`; retained `cabinetId` as a deprecated compatibility alias in the SDK type.
+- Corrected Cabinet item statuses to `unuploaded` and `uploaded`.
+
 ## 0.2.0 - 2026-09-05
 
 - Added the typed `TaskOutcome` contract to execution results, execution history, and schedule metadata.

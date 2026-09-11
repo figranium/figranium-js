@@ -153,4 +153,13 @@ describe("action helpers", () => {
     });
     expect(actions.waitForCaptcha().type).toBe("wait_captcha");
   });
+
+  it("creates the v0.18 browser interaction actions", () => {
+    expect(actions.click(".file", "double", { id: "open" })).toEqual({ id: "open", type: "click", selector: ".file", clickType: "double" });
+    expect(actions.check("#terms")).toMatchObject({ type: "check", selector: "#terms" });
+    expect(actions.uncheck("#terms")).toMatchObject({ type: "uncheck", selector: "#terms" });
+    expect(actions.dragAndDrop(".card", ".done")).toMatchObject({ type: "drag_and_drop", selector: ".card", targetSelector: ".done" });
+    expect(actions.reload()).toMatchObject({ type: "reload" });
+    expect(actions.select("#language", "en")).toMatchObject({ type: "select", selector: "#language", value: "en" });
+  });
 });
