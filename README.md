@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/figranium/figranium-js/main/banner.png" alt="Figranium Banner">
 </div>
 
-# Figranium JavaScript/TypeScript SDK
+# Figranium JavaScript SDK
 
 [![npm version](https://img.shields.io/npm/v/%40figranium%2Fsdk.svg)](https://www.npmjs.com/package/@figranium/sdk)
 
