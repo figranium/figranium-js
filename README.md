@@ -3,7 +3,7 @@
 
   <h1>Figranium JavaScript SDK</h1>
 
-  <a href="https://www.npmjs.com/package/@figranium/sdk"><img src="https://img.shields.io/npm/v/%40figranium%2Fsdk.svg?style=for-the-badge&label=NPM" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@figranium/sdk"><img src="https://img.shields.io/npm/v/%40figranium%2Fsdk.svg?style=for-the-badge&label=NPM&logo=npm&logoColor=white" alt="npm version"></a>
 
   <p><strong>Official TypeScript and JavaScript SDK for Figranium, the self-hosted browser automation and web scraping platform.</strong></p>
 
