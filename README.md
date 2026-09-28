@@ -1,12 +1,14 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/figranium/figranium-js/main/banner.png" alt="Figranium Banner">
+
+  <h1>Figranium JavaScript SDK</h1>
+
+  <a href="https://www.npmjs.com/package/@figranium/sdk"><img src="https://img.shields.io/npm/v/%40figranium%2Fsdk.svg?style=for-the-badge&label=NPM" alt="npm version"></a>
+
+  <p><strong>Official TypeScript and JavaScript SDK for Figranium, the self-hosted browser automation and web scraping platform.</strong></p>
+
+  <p><a href="https://figranium.dev/docs/sdk/javascript"><strong>Documentation</strong></a></p>
 </div>
-
-# Figranium JavaScript SDK
-
-[![npm version](https://img.shields.io/npm/v/%40figranium%2Fsdk.svg)](https://www.npmjs.com/package/@figranium/sdk)
-
-Official TypeScript and JavaScript SDK for [Figranium](https://github.com/figranium/figranium), the self-hosted browser automation and web scraping platform.
 
 - TypeScript-first, with complete declaration files
 - Works in Node.js 18+ and modern browsers
