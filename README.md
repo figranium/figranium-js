@@ -7,7 +7,7 @@
 
   <p><strong>Official TypeScript and JavaScript SDK for Figranium, the self-hosted browser automation and web scraping platform.</strong></p>
 
-  <p><a href="https://figranium.dev/docs/sdk/javascript"><strong>Documentation</strong></a></p>
+  <p><a href="https://figranium.dev/docs/sdk/js"><strong>Documentation</strong></a></p>
 </div>
 
 - TypeScript-first, with complete declaration files
