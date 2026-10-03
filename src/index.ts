@@ -4,6 +4,7 @@ export { action, actions, variable } from "./actions";
 export {
   AuthResource,
   BrowserResource,
+  CabinetsResource,
   CapturesResource,
   CredentialsResource,
   ExecutionResource,
