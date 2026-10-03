@@ -1,4 +1,5 @@
 import { HttpClient } from "./http";
+import { TemplatesResource } from "./templates";
 import {
   AuthResource,
   BrowserResource,
@@ -17,6 +18,7 @@ import type { ExecuteTaskOptions, ExecutionResult, FigraniumOptions, RequestOpti
 export class Figranium {
   readonly auth: AuthResource;
   readonly tasks: TasksResource;
+  readonly templates: TemplatesResource;
   readonly executions: ExecutionsResource;
   readonly schedules: SchedulesResource;
   readonly captures: CapturesResource;
@@ -31,6 +33,7 @@ export class Figranium {
     const http = new HttpClient(options);
     this.auth = new AuthResource(http);
     this.tasks = new TasksResource(http);
+    this.templates = new TemplatesResource(http);
     this.executions = new ExecutionsResource(http);
     this.schedules = new SchedulesResource(http);
     this.captures = new CapturesResource(http);
