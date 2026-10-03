@@ -15,3 +15,4 @@ export {
 } from "./resources";
 export type { AiModels, AiProvider, Theme } from "./resources";
 export type * from "./types";
+export { TemplatesResource } from "./templates";
