@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 - 2026-10-03
+
+- Added v0.20 template catalog listing, paginated search, detail retrieval, and explicit successful-import tracking.
+- Exported the Templates resource.
+
+
 All notable changes to `@figranium/sdk` are documented here.
 
 ## 0.3.0 - 2026-09-11
