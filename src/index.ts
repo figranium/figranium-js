@@ -4,6 +4,7 @@ export { action, actions, variable } from "./actions";
 export {
   AuthResource,
   BrowserResource,
+  CabinetsResource,
   CapturesResource,
   CredentialsResource,
   ExecutionResource,
@@ -15,3 +16,4 @@ export {
 } from "./resources";
 export type { AiModels, AiProvider, Theme } from "./resources";
 export type * from "./types";
+export { TemplatesResource } from "./templates";
