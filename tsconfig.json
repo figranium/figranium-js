@@ -4,7 +4,6 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "baseUrl": ".",
     "paths": { "@figranium/sdk": ["./src/index.ts"] },
     "types": ["node", "vitest/globals"],
     "strict": true,
