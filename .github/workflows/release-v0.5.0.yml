@@ -21,6 +21,19 @@ jobs:
           node-version: "24"
           package-manager-cache: false
 
+      - name: Regenerate dependency lockfile
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Persist regenerated lockfile
+        run: |
+          if ! git diff --quiet -- package-lock.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "fix: regenerate dependency lockfile"
+            git push origin HEAD:main
+          fi
+
       - run: npm ci
       - run: npm run check
 
@@ -30,7 +43,7 @@ jobs:
         run: |
           TAG="v0.5.0"
           if ! git rev-parse "$TAG" >/dev/null 2>&1; then
-            git tag "$TAG" "$GITHUB_SHA"
+            git tag "$TAG" HEAD
             git push origin "$TAG"
           fi
 
