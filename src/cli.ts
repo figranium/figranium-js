@@ -50,11 +50,11 @@ export function parseArgs(argv: string[], env: NodeJS.ProcessEnv = process.env):
 
   const options: CliOptions = {
     taskId,
-    baseUrl: env.FIGRANIUM_URL,
-    apiKey: env.FIGRANIUM_API_KEY,
     variables: {},
     json: false,
   };
+  if (env.FIGRANIUM_URL) options.baseUrl = env.FIGRANIUM_URL;
+  if (env.FIGRANIUM_API_KEY) options.apiKey = env.FIGRANIUM_API_KEY;
 
   for (let i = 0; i < rest.length; i++) {
     const arg = rest[i];
@@ -98,11 +98,12 @@ export async function main(
       return EXIT_SUCCESS;
     }
 
-    const client = new Figranium({
-      baseUrl: options.baseUrl,
+    const clientOptions = {
       apiKey: options.apiKey,
-      timeoutMs: options.timeoutMs,
-    });
+      ...(options.baseUrl ? { baseUrl: options.baseUrl } : {}),
+      ...(options.timeoutMs ? { timeoutMs: options.timeoutMs } : {}),
+    };
+    const client = new Figranium(clientOptions);
 
     process.stderr.write(`Running Figranium Task ${options.taskId}...\n`);
     const result = await client.runTask(options.taskId, {
