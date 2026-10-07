@@ -1,0 +1,64 @@
+name: Release v0.5.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/release-v0.5.0.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Run checks
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - run: npm ci
+      - run: npm run check
+
+      - name: Create v0.5.0 tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v0.5.0"
+          if ! git rev-parse "$TAG" >/dev/null 2>&1; then
+            git tag "$TAG" "$GITHUB_SHA"
+            git push origin "$TAG"
+          fi
+
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            cat > "$RUNNER_TEMP/notes.md" <<'EOF'
+          ## What's new
+
+          Figranium's JavaScript SDK can now run saved Tasks directly from the command line, making the same Tasks you build visually usable in CI pipelines and deployment checks.
+
+          - Added `figranium run <task-id>` for command-line and CI Task execution.
+          - Added `FIGRANIUM_URL` and `FIGRANIUM_API_KEY` environment configuration.
+          - Added repeatable typed `--var name=value` inputs for passing environment-specific variables.
+          - Added `--timeout` and `--json` for CI-friendly control and machine-readable results.
+          - Added stable process exit codes: `0` for success, `1` for unsuccessful Task outcomes, and `2` for CLI, configuration, or transport failures.
+
+          This release makes it possible to build a Task once in Figranium and run that exact Task as part of a CI workflow without maintaining a separate browser test implementation.
+          EOF
+            gh release create "$TAG" --title "$TAG" --notes-file "$RUNNER_TEMP/notes.md" --verify-tag
+          fi
+
+      - name: Remove one-shot workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/release-v0.5.0.yml
+          git commit -m "ci: remove v0.5.0 release trigger"
+          git push origin HEAD:main
