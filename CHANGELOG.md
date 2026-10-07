@@ -2,6 +2,12 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
+## 0.5.0 - 2026-10-07
+
+- Added the `figranium run <task-id>` CLI for CI and command-line Task execution.
+- Added `FIGRANIUM_URL` and `FIGRANIUM_API_KEY` environment configuration, repeatable typed `--var` inputs, `--timeout`, and `--json`.
+- Added stable CI exit codes: `0` for success, `1` for unsuccessful Task outcomes, and `2` for CLI/configuration/transport failures.
+
 ## 0.4.0 - 2026-10-03
 
 - Added v0.20 template catalog listing, paginated search, detail retrieval, and explicit successful-import tracking.

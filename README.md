@@ -52,6 +52,21 @@ const figranium = new Figranium({ apiKey: process.env.FIGRANIUM_API_KEY });
 
 `baseUrl` defaults to `http://localhost:11345`. API keys use `Authorization: Bearer` by default, as recommended by Figranium. Set `apiKeyHeader: "x-api-key"` if your deployment expects that header.
 
+## CI and command line
+
+The package includes a zero-runtime-dependency CLI for running saved Tasks from CI:
+
+```bash
+FIGRANIUM_URL=https://figranium.example \
+FIGRANIUM_API_KEY="$FIGRANIUM_API_KEY" \
+npx @figranium/sdk run task-id \
+  --var baseUrl=https://preview.example.com
+```
+
+Use `--json` to emit the complete execution result, `--timeout <ms>` to set a deadline, and repeat `--var name=value` for runtime variables. `--url` and `--api-key` can override the environment variables.
+
+The command exits with `0` when the Task succeeds, `1` when the Task completes unsuccessfully, and `2` for CLI, authentication, network, or configuration failures. This makes the command usable directly as a GitHub Actions, GitLab CI, Jenkins, or other CI step.
+
 ## Create a typed task
 
 ```ts
