@@ -3,10 +3,6 @@ name: Publish package to npm
 on:
   release:
     types: [published]
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/publish.yml"
 
 permissions:
   contents: read
