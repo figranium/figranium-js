@@ -67,6 +67,6 @@
     "vitest": "^5.0.0"
   },
   "bin": {
-    "figranium": "./dist/cli.js"
+    "figranium": "dist/cli.js"
   }
 }
