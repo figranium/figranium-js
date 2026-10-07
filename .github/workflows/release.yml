@@ -4,12 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing version tag to release (for example v0.4.0)
+        description: Version tag to create and release (for example v0.5.0)
         required: true
         type: string
       notes:
-        description: Human-curated release notes
+        description: Human-written release notes
         required: true
+        type: string
+      target:
+        description: Commit SHA or branch to tag
+        required: false
+        default: main
         type: string
 
 permissions:
@@ -19,12 +24,30 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate tag
+      - name: Validate inputs
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid release tag: $TAG"
+            exit 1
+          fi
+
+      - name: Create tag if needed
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag }}
+          TARGET: ${{ inputs.target }}
         run: |
-          gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" >/dev/null
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists."
+          else
+            SHA="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${TARGET}" --jq .sha)"
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${TAG}" \
+              -f sha="$SHA"
+            echo "Created $TAG at $SHA."
+          fi
 
       - name: Create GitHub release
         env:
