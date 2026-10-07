@@ -1,8 +1,15 @@
 {
   "name": "@figranium/sdk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Official TypeScript and JavaScript SDK for the Figranium API",
-  "keywords": ["figranium", "browser-automation", "web-scraping", "sdk"],
+  "keywords": [
+    "figranium",
+    "browser-automation",
+    "web-scraping",
+    "sdk",
+    "ci",
+    "cli"
+  ],
   "license": "Apache-2.0",
   "author": "Figranium",
   "repository": {
@@ -15,7 +22,14 @@
   },
   "type": "module",
   "sideEffects": false,
-  "files": ["dist", "docs", "examples", "README.md", "LICENSE", "CHANGELOG.md"],
+  "files": [
+    "dist",
+    "docs",
+    "examples",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -31,7 +45,9 @@
       }
     }
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -49,5 +65,8 @@
     "tsup": "^8.5.0",
     "typescript": "^7.0.0",
     "vitest": "^5.0.0"
+  },
+  "bin": {
+    "figranium": "./dist/cli.js"
   }
 }
