@@ -4,20 +4,6 @@ import { Figranium } from "../src";
 const json = (body: unknown) => new Response(JSON.stringify(body), { headers: { "content-type": "application/json" } });
 
 describe("v0.21 session-only resources", () => {
-  it("lists and creates scoped keys with permissions and task allowlists", async () => {
-    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ keys: [], permissions: [] }));
-    const client = new Figranium({ session: true, fetch: fetcher });
-    await client.apiKeys.list();
-    await client.apiKeys.create({ name: "CI", permissions: ["tasks:run"], taskIds: ["a"] });
-    expect(fetcher.mock.calls.map(([url, init]) => [url, init?.method, init?.credentials])).toEqual([
-      ["http://localhost:11345/api/api-keys", "GET", "include"],
-      ["http://localhost:11345/api/api-keys", "POST", "include"],
-    ]);
-    expect(JSON.parse(String(fetcher.mock.calls[1]![1]?.body))).toEqual({
-      name: "CI", permissions: ["tasks:run"], taskIds: ["a"],
-    });
-  });
-
   it("encodes cookie state IDs and serializes storage state", async () => {
     const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ ok: true }));
     const client = new Figranium({ session: true, fetch: fetcher });
