@@ -2,6 +2,8 @@ import { HttpClient } from "./http";
 import { TemplatesResource } from "./templates";
 import {
   AuthResource,
+  ApiKeysResource,
+  CookieStatesResource,
   BrowserResource,
   CabinetsResource,
   CapturesResource,
@@ -17,6 +19,10 @@ import type { ExecuteTaskOptions, ExecutionResult, FigraniumOptions, RequestOpti
 
 export class Figranium {
   readonly auth: AuthResource;
+  /** Workspace-session-only API key management. */
+  readonly apiKeys: ApiKeysResource;
+  /** Workspace-session-only reusable browser storage states. */
+  readonly cookieStates: CookieStatesResource;
   readonly tasks: TasksResource;
   readonly templates: TemplatesResource;
   readonly executions: ExecutionsResource;
@@ -32,6 +38,8 @@ export class Figranium {
   constructor(options: FigraniumOptions = {}) {
     const http = new HttpClient(options);
     this.auth = new AuthResource(http);
+    this.apiKeys = new ApiKeysResource(http);
+    this.cookieStates = new CookieStatesResource(http);
     this.tasks = new TasksResource(http);
     this.templates = new TemplatesResource(http);
     this.executions = new ExecutionsResource(http);
