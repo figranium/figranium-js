@@ -350,3 +350,26 @@ export type FigraniumOptions = FigraniumAuth & {
   fetch?: typeof globalThis.fetch;
   headers?: HeadersInit;
 };
+
+/** v0.21 scoped key permissions. Management requires a workspace session. */
+export type ApiKeyPermission = "tasks:read" | "tasks:run" | "results:read" | "tasks:manage";
+export interface ScopedApiKey {
+  id: string;
+  name: string;
+  permissions: ApiKeyPermission[];
+  taskIds?: string[];
+  legacy?: boolean;
+  createdAt?: number;
+  [key: string]: unknown;
+}
+export interface BrowserCookieState {
+  cookies: UnknownRecord[];
+  origins: UnknownRecord[];
+}
+export interface NamedCookieState {
+  id: string;
+  name: string;
+  createdAt?: number;
+  updatedAt?: number;
+  [key: string]: unknown;
+}

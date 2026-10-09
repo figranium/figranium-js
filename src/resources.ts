@@ -1,6 +1,10 @@
 import { HttpClient, pathId } from "./http";
 import type {
   BrowserSession,
+  ApiKeyPermission,
+  ScopedApiKey,
+  BrowserCookieState,
+  NamedCookieState,
   Cabinet,
   CabinetItem,
   CabinetItemStatus,
@@ -438,4 +442,50 @@ export class ExecutionResource {
 export class HealthResource {
   constructor(private readonly http: HttpClient) {}
   check(options?: RequestOptions) { return this.http.request<HealthStatus>("GET", "/api/health", options); }
+}
+
+/** These routes require a logged-in workspace session, not a scoped API key. */
+export class ApiKeysResource {
+  constructor(private readonly http: HttpClient) {}
+
+  list(options?: RequestOptions) {
+    return this.http.request<{ keys: ScopedApiKey[]; legacySecret: string | null; permissions: ApiKeyPermission[] }>("GET", "/api/api-keys", options);
+  }
+
+  create(input: { name: string; permissions: ApiKeyPermission[]; taskIds?: string[] }, options?: RequestOptions) {
+    return this.http.request<{ key: ScopedApiKey; secret: string }>("POST", "/api/api-keys", { ...options, body: input });
+  }
+
+  revoke(id: string, options?: RequestOptions) {
+    return this.http.request<{ ok: boolean }>("DELETE", `/api/api-keys/${pathId(id)}`, options);
+  }
+}
+
+/** Cookie-state management requires workspace-session authentication and CSRF protection on mutations. */
+export class CookieStatesResource {
+  constructor(private readonly http: HttpClient) {}
+
+  list(options?: RequestOptions) {
+    return this.http.request<{ states: NamedCookieState[] }>("GET", "/api/cookie-states", options);
+  }
+
+  get(id: string, options?: RequestOptions) {
+    return this.http.request<NamedCookieState & { state: BrowserCookieState }>("GET", `/api/cookie-states/${pathId(id)}`, options);
+  }
+
+  create(input: { name: string; state: BrowserCookieState }, options?: RequestOptions) {
+    return this.http.request<NamedCookieState>("POST", "/api/cookie-states", { ...options, body: input });
+  }
+
+  rename(id: string, name: string, options?: RequestOptions) {
+    return this.http.request<NamedCookieState>("PATCH", `/api/cookie-states/${pathId(id)}`, { ...options, body: { name } });
+  }
+
+  update(id: string, state: BrowserCookieState, options?: RequestOptions) {
+    return this.http.request<NamedCookieState>("PATCH", `/api/cookie-states/${pathId(id)}`, { ...options, body: { state } });
+  }
+
+  delete(id: string, options?: RequestOptions) {
+    return this.http.request<{ ok: boolean }>("DELETE", `/api/cookie-states/${pathId(id)}`, options);
+  }
 }
