@@ -3,6 +3,8 @@ export { FigraniumError } from "./error";
 export { action, actions, variable } from "./actions";
 export {
   AuthResource,
+  ApiKeysResource,
+  CookieStatesResource,
   BrowserResource,
   CabinetsResource,
   CapturesResource,
