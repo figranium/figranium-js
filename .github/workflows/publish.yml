@@ -1,9 +1,6 @@
 name: Publish package to npm
 
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/publish.yml']
   release:
     types: [published]
 
@@ -12,7 +9,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: npm-publish-${{ github.event.release.tag_name || github.sha }}
+  group: npm-publish-${{ github.event.release.tag_name }}
   cancel-in-progress: false
 
 jobs:
