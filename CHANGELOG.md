@@ -2,6 +2,10 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
+## 0.6.1 - 2026-10-09
+
+- Removed scoped API key listing, creation, and revocation from the SDK. API keys must be managed through Figranium's own UI.
+
 ## 0.6.0 - 2026-10-09
 
 - Added typed session-only scoped API key management (list, create with permissions and task allowlists, revoke).
