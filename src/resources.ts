@@ -1,8 +1,6 @@
 import { HttpClient, pathId } from "./http";
 import type {
   BrowserSession,
-  ApiKeyPermission,
-  ScopedApiKey,
   BrowserCookieState,
   NamedCookieState,
   Cabinet,
@@ -442,23 +440,6 @@ export class ExecutionResource {
 export class HealthResource {
   constructor(private readonly http: HttpClient) {}
   check(options?: RequestOptions) { return this.http.request<HealthStatus>("GET", "/api/health", options); }
-}
-
-/** These routes require a logged-in workspace session, not a scoped API key. */
-export class ApiKeysResource {
-  constructor(private readonly http: HttpClient) {}
-
-  list(options?: RequestOptions) {
-    return this.http.request<{ keys: ScopedApiKey[]; legacySecret: string | null; permissions: ApiKeyPermission[] }>("GET", "/api/api-keys", options);
-  }
-
-  create(input: { name: string; permissions: ApiKeyPermission[]; taskIds?: string[] }, options?: RequestOptions) {
-    return this.http.request<{ key: ScopedApiKey; secret: string }>("POST", "/api/api-keys", { ...options, body: input });
-  }
-
-  revoke(id: string, options?: RequestOptions) {
-    return this.http.request<{ ok: boolean }>("DELETE", `/api/api-keys/${pathId(id)}`, options);
-  }
 }
 
 /** Cookie-state management requires workspace-session authentication and CSRF protection on mutations. */
