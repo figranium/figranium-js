@@ -14,7 +14,7 @@
 - Works in Node.js 18+ and modern browsers
 - ESM and CommonJS builds
 - No runtime dependencies
-- API-key and browser-session authentication
+- API-key authentication for automation APIs
 - Abortable requests, configurable timeouts, structured errors, and SSE streams
 
 ## Install
@@ -175,27 +175,12 @@ The `Figranium` instance exposes:
 | `executions` | List, inspect, stop, delete, clear, and stream runs |
 | `schedules` | Configure, describe, disable, and inspect schedules |
 | `captures` | List/delete recordings and screenshots; manage cookies |
-| `credentials` | Manage output credentials and browse Baserow metadata |
-| `browser` | Open browser sessions, highlight selectors, inspect headful sessions, and stream selector events |
 | `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints |
-| `settings` | Session-protected API keys, AI providers/models, theme, user agent, and proxy configuration |
-| `auth` | Initial setup and session login/logout/current-user methods |
 | `health` | Service health check |
 
 Convenience aliases are available at `figranium.runTask()`, `figranium.scrape()`, `figranium.agent()`, and `figranium.headful()`.
 
 See [docs/API.md](docs/API.md) for the method index and [examples/basic.ts](examples/basic.ts) for a complete example.
-
-## Session-only administration
-
-Figranium’s `/api/settings/*` endpoints require an authenticated user session rather than an API key. In a browser, construct the client with `{ session: true }` so cookies are included. Node’s built-in `fetch` does not keep a cookie jar; for Node-based administration, supply a cookie-aware `fetch` implementation through the `fetch` option.
-
-```ts
-const admin = new Figranium({
-  baseUrl: "https://figranium.example",
-  session: true,
-});
-```
 
 ## Custom fetch
 
