@@ -2,6 +2,12 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
+## 0.6.0 - 2026-10-09
+
+- Added typed session-only scoped API key management (list, create with permissions and task allowlists, revoke).
+- Added reusable Playwright cookie-state management (list, inspect, create, rename, update, delete).
+- Added endpoint and serialization regression tests for Figranium v0.21.0.
+
 ## 0.5.0 - 2026-10-07
 
 - Added the `figranium run <task-id>` CLI for CI and command-line Task execution.
