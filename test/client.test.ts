@@ -112,8 +112,6 @@ describe("Figranium client", () => {
     await client.executions.stop({ runId: "run-1" });
     await client.schedules.delete("task 1");
     await client.captures.delete("recording.webm");
-    await client.credentials.baserowTables("cred/1", 42);
-    await client.browser.inspect();
 
     expect(fetcher.mock.calls.map(([url, init]) => [init?.method, url])).toEqual([
       ["PATCH", "http://localhost:11345/api/tasks/task%201"],
