@@ -198,24 +198,11 @@ export class CapturesResource {
     return this.http.request<{ success: boolean }>("DELETE", `/api/data/captures/${pathId(name)}`, options);
   }
 
-  cookies(options?: RequestOptions) {
-    return this.http.request<{ cookies: UnknownRecord[]; origins: UnknownRecord[] }>("GET", "/api/data/cookies", options);
-  }
-
-  deleteCookie(cookie: { name: string; domain?: string; path?: string }, options?: RequestOptions) {
-    return this.http.request<{ success: boolean }>("POST", "/api/data/cookies/delete", {
-      ...options,
-      body: cookie,
-    });
-  }
-
   clear(options?: RequestOptions) {
     return this.http.request<{ success: boolean }>("POST", "/api/data/clear-screenshots", options);
   }
 
-  clearCookies(options?: RequestOptions) {
-    return this.http.request<{ success: boolean }>("POST", "/api/data/clear-cookies", options);
-  }
+
 }
 
 export class CabinetsResource {
