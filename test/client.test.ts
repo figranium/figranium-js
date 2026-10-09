@@ -112,16 +112,12 @@ describe("Figranium client", () => {
     await client.executions.stop({ runId: "run-1" });
     await client.schedules.delete("task 1");
     await client.captures.delete("recording.webm");
-    await client.credentials.baserowTables("cred/1", 42);
-    await client.browser.inspect();
 
     expect(fetcher.mock.calls.map(([url, init]) => [init?.method, url])).toEqual([
       ["PATCH", "http://localhost:11345/api/tasks/task%201"],
       ["POST", "http://localhost:11345/api/executions/stop"],
       ["DELETE", "http://localhost:11345/api/schedules/task%201"],
       ["DELETE", "http://localhost:11345/api/data/captures/recording.webm"],
-      ["GET", "http://localhost:11345/api/credentials/cred%2F1/proxy/baserow/databases/42/tables"],
-      ["POST", "http://localhost:11345/api/headful/inspect"],
     ]);
   });
 });

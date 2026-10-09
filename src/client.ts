@@ -1,23 +1,18 @@
 import { HttpClient } from "./http";
 import { TemplatesResource } from "./templates";
 import {
-  AuthResource,
   CookieStatesResource,
-  BrowserResource,
   CabinetsResource,
   CapturesResource,
-  CredentialsResource,
   ExecutionResource,
   ExecutionsResource,
   HealthResource,
   SchedulesResource,
-  SettingsResource,
   TasksResource,
 } from "./resources";
 import type { ExecuteTaskOptions, ExecutionResult, FigraniumOptions, RequestOptions, UnknownRecord } from "./types";
 
 export class Figranium {
-  readonly auth: AuthResource;
   /** Workspace-session-only reusable browser storage states. */
   readonly cookieStates: CookieStatesResource;
   readonly tasks: TasksResource;
@@ -26,15 +21,11 @@ export class Figranium {
   readonly schedules: SchedulesResource;
   readonly captures: CapturesResource;
   readonly cabinets: CabinetsResource;
-  readonly credentials: CredentialsResource;
-  readonly browser: BrowserResource;
-  readonly settings: SettingsResource;
   readonly execution: ExecutionResource;
   readonly health: HealthResource;
 
   constructor(options: FigraniumOptions = {}) {
     const http = new HttpClient(options);
-    this.auth = new AuthResource(http);
     this.cookieStates = new CookieStatesResource(http);
     this.tasks = new TasksResource(http);
     this.templates = new TemplatesResource(http);
@@ -42,9 +33,6 @@ export class Figranium {
     this.schedules = new SchedulesResource(http);
     this.captures = new CapturesResource(http);
     this.cabinets = new CabinetsResource(http);
-    this.credentials = new CredentialsResource(http);
-    this.browser = new BrowserResource(http);
-    this.settings = new SettingsResource(http);
     this.execution = new ExecutionResource(http);
     this.health = new HealthResource(http);
   }
