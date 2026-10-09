@@ -2,6 +2,13 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
+## 0.7.0 - 2026-10-09
+
+- Removed SDK authentication, credentials, settings, and interactive browser administration resources.
+- Removed legacy global cookie administration from captures; reusable cookie states remain available.
+- Kept Task, execution, templates, schedules, captures, cabinets, cookie states, and health APIs.
+- Breaking API surface reduction; use the Figranium UI for instance administration.
+
 ## 0.6.1 - 2026-10-09
 
 - Removed scoped API key listing, creation, and revocation from the SDK. API keys must be managed through Figranium's own UI.
