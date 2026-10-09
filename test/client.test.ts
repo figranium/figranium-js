@@ -118,8 +118,6 @@ describe("Figranium client", () => {
       ["POST", "http://localhost:11345/api/executions/stop"],
       ["DELETE", "http://localhost:11345/api/schedules/task%201"],
       ["DELETE", "http://localhost:11345/api/data/captures/recording.webm"],
-      ["GET", "http://localhost:11345/api/credentials/cred%2F1/proxy/baserow/databases/42/tables"],
-      ["POST", "http://localhost:11345/api/headful/inspect"],
     ]);
   });
 });
