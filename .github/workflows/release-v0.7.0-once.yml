@@ -1,0 +1,54 @@
+name: One-time JavaScript SDK v0.7.0 release
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/release-v0.7.0-once.yml']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Verify and sync lockfile
+        run: |
+          npm install --package-lock-only --ignore-scripts
+          npm ci
+          npm run check
+      - name: Commit lockfile and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore: synchronize v0.7.0 lockfile'
+            git push origin HEAD:main
+          fi
+          git tag v0.7.0 HEAD
+          git push origin v0.7.0
+          cat > "$RUNNER_TEMP/notes.md" <<'EOF'
+          # v0.7.0
+
+          Figranium's JavaScript SDK now focuses on automation rather than remote instance administration.
+
+          - Removed authentication, credentials, settings, and interactive browser administration resources.
+          - Removed legacy global cookie administration methods from captures.
+          - Retained tasks, templates, executions, schedules, captures, cabinets, cookie states, health, and the CI CLI.
+          - Breaking change: update integrations that previously relied on removed administration APIs; those operations belong in the Figranium UI.
+          EOF
+          gh release create v0.7.0 --title v0.7.0 --notes-file "$RUNNER_TEMP/notes.md" --verify-tag
+      - name: Cleanup one-time trigger
+        run: |
+          git rm .github/workflows/release-v0.7.0-once.yml
+          git commit -m 'ci: remove completed v0.7.0 release trigger'
+          git pull --rebase origin main
+          git push origin HEAD:main
