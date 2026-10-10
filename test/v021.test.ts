@@ -26,7 +26,7 @@ describe("v0.21 Task cookie-state compatibility", () => {
     const task: Task = { name: "Stateful", url: "https://example.com", mode: "agent", cookieStateId: "state_login" };
     await client.tasks.save(task);
     await client.tasks.update("task_1", { cookieStateId: null });
-    expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body)).cookieStateId).toBe("state_login");
-    expect(JSON.parse(String(fetcher.mock.calls[1][1]?.body)).cookieStateId).toBeNull();
+    expect(JSON.parse(String(fetcher.mock.calls[0]?.[1]?.body)).cookieStateId).toBe("state_login");
+    expect(JSON.parse(String(fetcher.mock.calls[1]?.[1]?.body)).cookieStateId).toBeNull();
   });
 });
