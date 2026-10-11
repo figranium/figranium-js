@@ -2,7 +2,13 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
-## 0.7.1 - 2026-10-11\n\n- Added `cookieStateId` Task typing and request serialization coverage for named, default, and fresh cookie-state selection.\n- Added `databaseId` and `dedicated` to typed Baserow Task outputs, with request serialization coverage.\n- Clarified that workspace-only administration remains outside scoped API-key automation clients.\n\n## 0.7.0 - 2026-10-09
+## 0.7.1 - 2026-10-11
+
+- Added `cookieStateId` Task typing and request serialization coverage for named, default, and fresh cookie-state selection.
+- Added `databaseId` and `dedicated` to typed Baserow Task outputs, with request serialization coverage.
+- Clarified that workspace-only administration remains outside scoped API-key automation clients.
+
+## 0.7.0 - 2026-10-09
 
 - Removed SDK authentication, credentials, settings, and interactive browser administration resources.
 - Removed legacy global cookie administration from captures; reusable cookie states remain available.
