@@ -178,6 +178,9 @@ export interface Task {
   includeHtml?: boolean;
   includeShadowDom?: boolean;
   disableRecording?: boolean;
+  /** Named cookie state to reuse. Set null for a fresh browser state; omitted uses the instance default. */
+  cookieStateId?: string | null;
+  /** @deprecated Use cookieStateId: null for a fresh state. */
   statelessExecution?: boolean;
   /** Cabinet used to receive downloads intercepted during this Task. */
   downloadCabinetId?: string;

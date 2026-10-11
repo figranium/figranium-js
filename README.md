@@ -97,6 +97,8 @@ const result = await figranium.runTask(saved.id!, {
 });
 ```
 
+For Figranium v0.21+, set `cookieStateId` on a Task to reuse an existing named browser cookie state. Set `cookieStateId: null` to run with a fresh state, or omit it to use the instance default. The legacy `statelessExecution` field is deprecated. Cookie-state administration requires an authenticated workspace session; scoped API keys can reference existing states but cannot manage them.
+
 `variable("query")` produces Figranium’s required `{$query}` syntax. The action helpers generate stable unique action IDs. You can also pass plain typed action objects when you need every field exposed by the task specification.
 
 CAPTCHA-aware tasks can wait for an interactable challenge without clicking it, then solve it in a separate action:
