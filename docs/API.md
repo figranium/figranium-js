@@ -1,6 +1,6 @@
 # API method index
 
-All methods return promises unless marked as a stream. The final optional argument is a request options object with `signal`, `timeoutMs`, and `headers`.
+This index reflects the JavaScript SDK source as of v0.7.1. All methods return promises unless marked as a stream. The final optional argument accepts `signal`, `timeoutMs`, and `headers`.
 
 ## Top level
 
@@ -9,7 +9,7 @@ All methods return promises unless marked as a stream. The final optional argume
 - `agent(input)`
 - `headful(input)`
 
-Agent and scrape execution results include an `outcome` of `success`, `error`, `stopped`, `crashed`, or `anti_bot`. Classified runtime outcomes are completed responses; inspect `result.outcome` instead of relying only on HTTP status.
+Execution results can report `success`, `error`, `stopped`, `crashed`, or `anti_bot` as their `outcome`. Check the outcome rather than relying only on HTTP status.
 
 ## Tasks
 
@@ -27,13 +27,15 @@ Agent and scrape execution results include an `outcome` of `success`, `error`, `
 - `tasks.generateScript(description)`
 - `tasks.run(id, input?)`
 
+On Figranium v0.21+, Tasks can reference `cookieStateId` (string for a named state, `null` for fresh, omitted for the instance default). Baserow Task output typing includes `databaseId` and `dedicated`. Scoped keys must have the relevant permissions and respect Task allowlists.
+
 ## Executions
 
-- `executions.list()` — uses the API-key-compatible list route by default
+- `executions.list({ apiKeyRoute? })` — defaults to `/api/executions/list`
 - `executions.get(id)`
 - `executions.delete(id)`
 - `executions.clear()`
-- `executions.stop({ runId?, executionId? })`
+- `executions.stop({ runId })`
 - `executions.stream()` — `AsyncIterable<StreamEvent>`
 
 ## Schedules
@@ -45,61 +47,66 @@ Agent and scrape execution results include an `outcome` of `success`, `error`, `
 - `schedules.describe(taskId, schedule)`
 - `schedules.overallStatus()`
 
-## Captures and cookies
+These server routes require an authenticated workspace session; an API key alone is not sufficient for schedule administration.
+
+## Captures
 
 - `captures.list({ runId? })`
 - `captures.screenshots()`
 - `captures.delete(name)`
-- `captures.cookies()`
-- `captures.deleteCookie({ name, domain?, path? })`
 - `captures.clear()`
-- `captures.clearCookies()`
 
-## Credentials
+Legacy `captures.cookies()`, `captures.deleteCookie()`, and `captures.clearCookies()` were removed in v0.7.0.
 
-- `credentials.list()`
-- `credentials.create(input)`
-- `credentials.update(id, input)`
-- `credentials.delete(id)`
-- `credentials.baserowDatabases(id)`
-- `credentials.baserowTables(id, databaseId)`
+## Cabinets
 
-## Browser and headful sessions
+- `cabinets.list()`
+- `cabinets.create(name)`
+- `cabinets.rename(cabinetId, name)`
+- `cabinets.delete(cabinetId, { targetCabinetId?, migrate? })`
+- `cabinets.listItems(cabinetId)`
+- `cabinets.clear(cabinetId)`
+- `cabinets.setItemStatus(cabinetId, itemIds, status)`
+- `cabinets.removeItems(cabinetId, itemIds)`
+- `cabinets.zipItems(cabinetId, itemIds, name?)`
+- `cabinets.unzipItem(cabinetId, itemId)`
+- `cabinets.getItemDownloadUrl(cabinetId, itemId)` — URL builder, not an authenticated fetch
 
-- `browser.open(input?)`
-- `browser.highlight(input)`
-- `browser.stopHeadful()`
-- `browser.headfulStatus()`
-- `browser.inspect()`
-- `browser.vncPassword()`
-- `browser.selectorStream()` — `AsyncIterable<StreamEvent>`
+## Cookie states (workspace session required)
 
-## Settings (session required)
+- `cookieStates.list()`
+- `cookieStates.get(id)`
+- `cookieStates.create({ name, state })`
+- `cookieStates.rename(id, name)`
+- `cookieStates.update(id, state)`
+- `cookieStates.delete(id)`
 
-- `settings.getApiKey()` / `settings.setApiKey(apiKey?)`
-- `settings.getUserAgent()` / `settings.setUserAgent(selection)`
-- `settings.getAiModels()` / `settings.setAiModels(models)`
-- `settings.getProviderKeys(provider)` / `settings.setProviderKeys(provider, keys)`
-- `settings.getTheme()` / `settings.setTheme(theme)`
-- `settings.listProxies()`
-- `settings.addProxy(proxy)` / `settings.importProxies(proxies)`
-- `settings.updateProxy(id, proxy)`
-- `settings.deleteProxy(id)` / `settings.deleteProxies(ids)`
-- `settings.setDefaultProxy(id)`
-- `settings.setProxyRotation(input)`
+Cookie-state management is session-authenticated, and mutations require CSRF protection. Scoped API keys may reference existing cookie states on Tasks but cannot administer states.
 
-## Authentication and health
+## Templates
 
-- `auth.checkSetup()`
-- `auth.setup(input)`
-- `auth.login(input)`
-- `auth.logout()`
-- `auth.me()`
+- `templates.list()`
+- `templates.search({ limit?, offset?, sort?, category?, search? })`
+- `templates.get(id)`
+- `templates.recordImport(id)` — call only after successful local import
+
+## Direct execution
+
+- `execution.scrape(input)`
+- `execution.agent(input)`
+- `execution.headful(input)`
+
+## Health
+
 - `health.check()`
 
 ## Helpers
 
-- `variable(name)` creates a `{$name}` template token.
-- `action(input)` adds an action ID to any valid typed action.
-- `actions` contains helpers for common navigation, interaction, extraction, control-flow, HTTP, and CAPTCHA actions.
-- `FigraniumError` contains normalized HTTP and transport failure details.
+- `variable(name)` creates a `{$name}` token.
+- `action(input)` adds an action ID to a typed action.
+- `actions` provides navigation, interaction, extraction, control-flow, HTTP, and CAPTCHA helpers.
+- `FigraniumError` normalizes HTTP and transport failures.
+
+## Scope of the SDK
+
+The v0.7+ SDK deliberately does **not** expose `auth`, `credentials`, `settings`, `browser`, or `apiKeys` administration resources. Baserow credentials, 1Password Vault setup, import/export administration, and Cloud authentication handoff belong to workspace/session flows, not generic scoped API-key automation. Server authorization remains authoritative for every method.
