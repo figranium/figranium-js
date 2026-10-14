@@ -30,3 +30,17 @@ describe("v0.21 Task cookie-state compatibility", () => {
     expect(JSON.parse(String(fetcher.mock.calls[1]?.[1]?.body)).cookieStateId).toBeNull();
   });
 });
+
+
+describe("v0.21 Baserow Task output compatibility", () => {
+  it("preserves database and dedicated-table fields when saving a Task", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ id: "task_1" }));
+    const client = new Figranium({ apiKey: "test", fetch: fetcher });
+    const task: Task = {
+      name: "Baserow output", url: "https://example.com", mode: "agent",
+      output: { provider: "baserow", credentialId: "credential_1", databaseId: "12", tableId: "34", dedicated: true, onError: "fail" },
+    };
+    await client.tasks.save(task);
+    expect(JSON.parse(String(fetcher.mock.calls[0]?.[1]?.body)).output).toEqual(task.output);
+  });
+});

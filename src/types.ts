@@ -150,7 +150,11 @@ export interface Schedule {
 export interface TaskOutput {
   provider: "baserow";
   credentialId: string;
+  /** Baserow database containing the destination table (used by provisioning). */
+  databaseId?: string;
   tableId: string;
+  /** Whether this output uses a dedicated Baserow table. */
+  dedicated?: boolean;
   onError?: "ignore" | "fail";
 }
 
