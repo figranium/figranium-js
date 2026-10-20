@@ -36,7 +36,7 @@ export class HttpClient {
     const hasBody = options.body !== undefined;
     if (hasBody && !headers.has("content-type")) headers.set("content-type", "application/json");
     // Node session requests have no browser-provided Origin; satisfy server CSRF checks.
-    if (this.credentials === "include" && typeof window === "undefined" &&
+    if (this.credentials === "include" && typeof process !== "undefined" && Boolean(process.versions?.node) &&
         !["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase()) &&
         !headers.has("origin") && !headers.has("referer") && !headers.has("x-requested-with")) {
       headers.set("x-requested-with", "XMLHttpRequest");
