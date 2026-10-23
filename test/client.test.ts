@@ -42,7 +42,7 @@ describe("Figranium client", () => {
   });
 
   it("sends a CSRF hint for Node session mutations without Origin", async () => {
-    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ success: true }));
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ success: true }));
     const client = new Figranium({ session: true, fetch: fetcher });
 
     await client.tasks.update("task-1", { name: "Updated" });
