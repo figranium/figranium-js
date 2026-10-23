@@ -41,6 +41,23 @@ describe("Figranium client", () => {
     expect(result.outcome).toBe("anti_bot");
   });
 
+  it("sends a CSRF hint for Node session mutations without Origin", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ success: true }));
+    const client = new Figranium({ session: true, fetch: fetcher });
+
+    await client.tasks.update("task-1", { name: "Updated" });
+
+    const init = fetcher.mock.calls[0]![1];
+    expect(init?.credentials).toBe("include");
+    expect(new Headers(init?.headers).get("x-requested-with")).toBe("XMLHttpRequest");
+
+    const originClient = new Figranium({ session: true, headers: { Origin: "https://figranium.example" }, fetch: fetcher });
+    await originClient.tasks.update("task-2", { name: "Updated" });
+    const originHeaders = new Headers(fetcher.mock.calls[1]![1]?.headers);
+    expect(originHeaders.get("origin")).toBe("https://figranium.example");
+    expect(originHeaders.has("x-requested-with")).toBe(false);
+  });
+
   it("preserves server diagnostics in FigraniumError", async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(
       { error: "TASK_NOT_FOUND", message: "No such task", details: { id: "x" } },
