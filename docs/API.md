@@ -36,7 +36,7 @@ On Figranium v0.21+, Tasks can reference `cookieStateId` (string for a named sta
 - `executions.delete(id)`
 - `executions.clear()`
 - `executions.stop({ runId })`
-- `executions.stream()` — `AsyncIterable<StreamEvent>`
+- `executions.stream(runId, options?)` — `AsyncIterable<StreamEvent>`; requires a workspace session and the run ID (`GET /api/executions/stream?runId=...`)
 
 ## Schedules
 
