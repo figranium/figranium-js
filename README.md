@@ -175,16 +175,21 @@ The `Figranium` instance exposes:
 
 | Resource | Purpose |
 |---|---|
-| `tasks` | Save, update, delete, version, generate, and execute tasks |
-| `executions` | List, inspect, stop, delete, clear, and stream runs |
-| `schedules` | Configure, describe, disable, and inspect schedules |
-| `captures` | List/delete recordings and screenshots; manage cookies |
+| `tasks` | Save, update, delete, version, generate, and run Tasks |
+| `executions` | List, inspect, stop, delete, clear, and stream executions |
+| `schedules` | Inspect and configure Task schedules (workspace-session authentication required by the server) |
+| `captures` | List and delete recordings and screenshots; no legacy global cookie administration |
+| `cabinets` | Manage download Cabinets and their items |
+| `cookieStates` | Manage named browser cookie states (workspace session required; mutations also require CSRF protection) |
+| `templates` | Browse, search, and retrieve Templates; record successful imports |
 | `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints |
 | `health` | Service health check |
 
 Convenience aliases are available at `figranium.runTask()`, `figranium.scrape()`, `figranium.agent()`, and `figranium.headful()`.
 
-See [docs/API.md](docs/API.md) for the method index and [examples/basic.ts](examples/basic.ts) for a complete example.
+**Authentication and permissions:** Scoped API keys only authorize the Task and execution operations permitted by their scopes and optional Task allowlists. Having an SDK method does not mean the server accepts an API key for it. Cookie-state management, schedule administration, Baserow credentials, 1Password Vault configuration, import/export administration, and Cloud authentication handoff must not be treated as general API-key operations. Use the authenticated Figranium workspace for administrative operations. The SDK does not expose credential, Vault, settings, or Cloud-auth administration resources.
+
+See [docs/API.md](docs/API.md) for the current method index and [examples/basic.ts](examples/basic.ts) for a complete example.
 
 ## Custom fetch
 
