@@ -20,7 +20,7 @@ describe("Figranium client", () => {
   });
 
   it("selects the correct execution-list route for session and API-key clients", async () => {
-    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ executions: [] }));
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ executions: [] }));
     const session = new Figranium({ session: true, fetch: fetcher });
     const apiKey = new Figranium({ apiKey: "secret", fetch: fetcher });
 
