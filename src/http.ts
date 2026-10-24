@@ -10,6 +10,7 @@ interface InternalRequestOptions extends RequestOptions {
 
 export class HttpClient {
   readonly baseUrl: string;
+  readonly usesSession: boolean;
   private readonly fetcher: typeof globalThis.fetch;
   private readonly timeoutMs: number;
   private readonly headers: Headers;
@@ -26,7 +27,8 @@ export class HttpClient {
       if (options.apiKeyHeader === "x-api-key") this.headers.set("x-api-key", options.apiKey);
       else this.headers.set("authorization", `Bearer ${options.apiKey}`);
     }
-    this.credentials = options.session ? "include" : "same-origin";
+    this.usesSession = Boolean(options.session);
+    this.credentials = this.usesSession ? "include" : "same-origin";
   }
 
   async request<T>(method: string, path: string, options: InternalRequestOptions = {}): Promise<T> {
