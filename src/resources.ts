@@ -142,8 +142,9 @@ export class ExecutionsResource {
     return this.http.request<{ success: boolean }>("POST", "/api/executions/stop", { ...options, body: input });
   }
 
-  stream<T = unknown>(options?: RequestOptions): AsyncIterable<StreamEvent<T>> {
-    return this.http.stream<T>("/api/executions/stream", options);
+  /** Stream live events for a run. Requires a workspace session. */
+  stream<T = unknown>(runId: string, options?: RequestOptions): AsyncIterable<StreamEvent<T>> {
+    return this.http.stream<T>(`/api/executions/stream?runId=${encodeURIComponent(runId)}`, options);
   }
 }
 
