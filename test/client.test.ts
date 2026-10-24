@@ -109,11 +109,13 @@ describe("Figranium client", () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(body, {
       headers: { "content-type": "text/event-stream" },
     }));
-    const client = new Figranium({ apiKey: "secret", fetch: fetcher });
+    const client = new Figranium({ session: true, fetch: fetcher });
 
     const events = [];
-    for await (const event of client.executions.stream()) events.push(event);
+    for await (const event of client.executions.stream("run/123 ?")) events.push(event);
 
+    expect(fetcher.mock.calls[0]![0]).toBe("http://localhost:11345/api/executions/stream?runId=run%2F123%20%3F");
+    expect(fetcher.mock.calls[0]![1]?.credentials).toBe("include");
     expect(events).toEqual([
       { data: { status: "running" }, raw: "{\"status\":\"running\"}", event: "execution", id: "one" },
       { data: "hello\nworld", raw: "hello\nworld", retry: 2500 },
@@ -132,9 +134,9 @@ describe("Figranium client", () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(body, {
       headers: { "content-type": "text/event-stream" },
     }));
-    const client = new Figranium({ apiKey: "secret", fetch: fetcher });
+    const client = new Figranium({ session: true, fetch: fetcher });
 
-    for await (const _event of client.executions.stream()) break;
+    for await (const _event of client.executions.stream("run-123")) break;
 
     expect(cancelled).toHaveBeenCalledOnce();
   });
