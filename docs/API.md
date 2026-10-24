@@ -31,7 +31,7 @@ On Figranium v0.21+, Tasks can reference `cookieStateId` (string for a named sta
 
 ## Executions
 
-- `executions.list({ apiKeyRoute? })` — defaults to `/api/executions/list`
+- `executions.list({ apiKeyRoute? })` — defaults to `/api/executions` with `session: true`, or `/api/executions/list` with an API key; `apiKeyRoute` overrides this selection
 - `executions.get(id)`
 - `executions.delete(id)`
 - `executions.clear()`
