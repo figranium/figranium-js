@@ -19,6 +19,24 @@ describe("Figranium client", () => {
     expect(new Headers(init?.headers).get("authorization")).toBe("Bearer secret");
   });
 
+  it("selects the correct execution-list route for session and API-key clients", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ executions: [] }));
+    const session = new Figranium({ session: true, fetch: fetcher });
+    const apiKey = new Figranium({ apiKey: "secret", fetch: fetcher });
+
+    await session.executions.list();
+    await apiKey.executions.list();
+    await session.executions.list({ apiKeyRoute: true });
+    await apiKey.executions.list({ apiKeyRoute: false });
+
+    expect(fetcher.mock.calls.map(([url]) => url)).toEqual([
+      "http://localhost:11345/api/executions",
+      "http://localhost:11345/api/executions/list",
+      "http://localhost:11345/api/executions/list",
+      "http://localhost:11345/api/executions",
+    ]);
+  });
+
   it("supports x-api-key authentication", async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ status: "ok" }));
     const client = new Figranium({ apiKey: "secret", apiKeyHeader: "x-api-key", fetch: fetcher });

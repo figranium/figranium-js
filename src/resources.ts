@@ -116,9 +116,12 @@ export class ExecutionsResource {
 
   list(options?: RequestOptions & { apiKeyRoute?: boolean }) {
     const { apiKeyRoute, ...request } = options ?? {};
+    // The server separates session and API-key list routes.
+    // Explicit apiKeyRoute overrides automatic authentication-mode selection.
+    const useApiKeyRoute = apiKeyRoute ?? !this.http.usesSession;
     return this.http.request<{ executions: Execution[] }>(
       "GET",
-      apiKeyRoute === false ? "/api/executions" : "/api/executions/list",
+      useApiKeyRoute ? "/api/executions/list" : "/api/executions",
       request,
     );
   }
