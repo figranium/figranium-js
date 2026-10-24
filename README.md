@@ -141,7 +141,8 @@ translation: { enabled: true, targetLanguage: "spanish" }
 ```ts
 const controller = new AbortController();
 
-for await (const event of figranium.executions.stream({
+// Streaming requires a workspace session and the run ID to follow.
+for await (const event of figranium.executions.stream("run-123", {
   signal: controller.signal,
 })) {
   console.log(event.event, event.data);
