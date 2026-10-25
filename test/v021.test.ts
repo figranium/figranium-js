@@ -52,3 +52,16 @@ describe("retired AI Task endpoints", () => {
     expect("generateScript" in client.tasks).toBe(false);
   });
 });
+
+describe("Task PATCH response compatibility", () => {
+  it("exposes the server's ISO updatedAt timestamp as a string", async () => {
+    const updatedAt = "2026-10-25T12:00:00.000Z";
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({
+      id: "task_1", updatedAt, status: "success", task: { id: "task_1", name: "Updated" },
+    }));
+    const client = new Figranium({ apiKey: "test", fetch: fetcher });
+    const response = await client.tasks.update("task_1", { name: "Updated" });
+    const timestamp: string = response.updatedAt;
+    expect(timestamp).toBe(updatedAt);
+  });
+});
