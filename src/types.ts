@@ -228,7 +228,8 @@ export interface Execution<T = unknown> extends UnknownRecord {
   timestamp: number;
   method?: string;
   path?: string;
-  status?: string;
+  /** HTTP response status recorded by the server (normally numeric). */
+  status?: number | string;
   outcome?: TaskOutcome;
   durationMs?: number;
   source?: string;
