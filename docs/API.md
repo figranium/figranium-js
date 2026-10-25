@@ -93,11 +93,13 @@ Cookie-state management is session-authenticated, and mutations require CSRF pro
 - `templates.get(id)`
 - `templates.recordImport(id)` — call only after successful local import
 
-## Direct execution
+## Direct execution (workspace session required)
 
 - `execution.scrape(input)`
 - `execution.agent(input)`
 - `execution.headful(input)`
+
+These methods and their top-level aliases call `/scrape`, `/agent`, and `/headful`, which require a workspace session (`requireAuth` in Figranium's server). An API key alone cannot invoke them. For API-key-based automation, use `tasks.run(id, input?)` or `runTask(id, input?)` with `tasks:run` permission and a permitted Task ID.
 
 ## Health
 
