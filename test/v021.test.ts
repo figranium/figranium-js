@@ -44,3 +44,11 @@ describe("v0.21 Baserow Task output compatibility", () => {
     expect(JSON.parse(String(fetcher.mock.calls[0]?.[1]?.body)).output).toEqual(task.output);
   });
 });
+
+describe("retired AI Task endpoints", () => {
+  it("does not expose methods that call non-existent server routes", () => {
+    const client = new Figranium({ apiKey: "test" });
+    expect("generateSelector" in client.tasks).toBe(false);
+    expect("generateScript" in client.tasks).toBe(false);
+  });
+});
