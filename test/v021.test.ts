@@ -65,3 +65,16 @@ describe("Task PATCH response compatibility", () => {
     expect(timestamp).toBe(updatedAt);
   });
 });
+
+describe("cookie-state timestamp compatibility", () => {
+  it("types createdAt and updatedAt as server ISO strings", async () => {
+    const createdAt = "2026-10-24T12:00:00.000Z";
+    const updatedAt = "2026-10-25T12:00:00.000Z";
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ id: "cookies_1", name: "Login", createdAt, updatedAt }));
+    const client = new Figranium({ session: true, fetch: fetcher });
+    const state = await client.cookieStates.get("cookies_1");
+    const created: string | undefined = state.createdAt;
+    const updated: string | undefined = state.updatedAt;
+    expect([created, updated]).toEqual([createdAt, updatedAt]);
+  });
+});
