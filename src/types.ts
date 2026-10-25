@@ -366,7 +366,7 @@ export interface BrowserCookieState {
 export interface NamedCookieState {
   id: string;
   name: string;
-  createdAt?: number;
-  updatedAt?: number;
+  createdAt?: string;
+  updatedAt?: string;
   [key: string]: unknown;
 }
