@@ -252,6 +252,8 @@ export interface Cabinet {
   name: string;
   isDefault?: boolean;
   itemCount?: number;
+  /** Number of items not yet marked as uploaded by the Cabinet catalog. */
+  unuploadedCount?: number;
   createdAt?: number;
 }
 
