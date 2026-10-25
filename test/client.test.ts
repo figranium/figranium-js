@@ -19,6 +19,33 @@ describe("Figranium client", () => {
     expect(new Headers(init?.headers).get("authorization")).toBe("Bearer secret");
   });
 
+  it("uses the session-compatible Task list route for summaries", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async (url) =>
+      json(String(url).endsWith("/api/tasks")
+        ? [
+            { id: "task_1", name: "Session task", description: "Details", url: "https://example.com", mode: "agent" },
+            { id: "task_2", name: "Another task", url: "https://example.org", mode: "agent" },
+          ]
+        : { tasks: [{ id: "task_3", name: "API-key task" }] }),
+    );
+    const session = new Figranium({ session: true, fetch: fetcher });
+    const apiKey = new Figranium({ apiKey: "secret", fetch: fetcher });
+
+    expect(await session.tasks.listSummaries()).toEqual({
+      tasks: [
+        { id: "task_1", name: "Session task", description: "Details" },
+        { id: "task_2", name: "Another task" },
+      ],
+    });
+    expect(await apiKey.tasks.listSummaries()).toEqual({
+      tasks: [{ id: "task_3", name: "API-key task" }],
+    });
+    expect(fetcher.mock.calls.map(([url]) => url)).toEqual([
+      "http://localhost:11345/api/tasks",
+      "http://localhost:11345/api/tasks/list",
+    ]);
+  });
+
   it("selects the correct execution-list route for session and API-key clients", async () => {
     const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ executions: [] }));
     const session = new Figranium({ session: true, fetch: fetcher });

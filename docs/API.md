@@ -25,6 +25,8 @@ Execution results can report `success`, `error`, `stopped`, `crashed`, or `anti_
 - `tasks.rollback(id, versionId)`
 - `tasks.run(id, input?)`
 
+`tasks.listSummaries()` uses `/api/tasks/list` with API keys and `/api/tasks` with workspace sessions (`session: true`), normalizing both responses to `{ tasks: TaskSummary[] }`.
+
 The former AI-based `tasks.generateSelector()` and `tasks.generateScript()` methods are not available: their server routes are absent in v0.20.0 and v0.21.x.
 
 On Figranium v0.21+, Tasks can reference `cookieStateId` (string for a named state, `null` for fresh, omitted for the instance default). Baserow Task output typing includes `databaseId` and `dedicated`. Scoped keys must have the relevant permissions and respect Task allowlists.
