@@ -130,6 +130,11 @@ export class ExecutionsResource {
     return this.http.request<{ execution: Execution<T> }>("GET", `/api/executions/${pathId(id)}`, options);
   }
 
+  /** Retrieve the complete stored output of an execution. Requires results:read for API keys. */
+  getFullResult<T = unknown>(id: string, options?: RequestOptions) {
+    return this.http.request<{ result: T }>("GET", `/api/executions/${pathId(id)}/result`, options);
+  }
+
   delete(id: string, options?: RequestOptions) {
     return this.http.request<{ success: boolean }>("DELETE", `/api/executions/${pathId(id)}`, options);
   }
