@@ -181,12 +181,12 @@ The `Figranium` instance exposes:
 | `schedules` | Inspect and configure Task schedules (workspace-session authentication required by the server) |
 | `captures` | List and delete recordings and screenshots; no legacy global cookie administration |
 | `cabinets` | Manage download Cabinets and their items |
-
-`cabinets.list()` and `cabinets.delete()` return `{ defaultCabinetId, cabinets }`, not a bare array or a success flag. `cabinets.unzipItem()` returns the extracted `CabinetItem` directly.
 | `cookieStates` | Manage named browser cookie states (workspace session required; mutations also require CSRF protection) |
 | `templates` | Browse, search, and retrieve Templates; record successful imports |
 | `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints (workspace session required) |
 | `health` | Service health check |
+
+`cabinets.list()` and `cabinets.delete()` return `{ defaultCabinetId, cabinets }`, not a bare array or a success flag. `cabinets.unzipItem()` returns the extracted `CabinetItem` directly.
 
 Convenience aliases are available at `figranium.runTask()`, `figranium.scrape()`, `figranium.agent()`, and `figranium.headful()`. Unlike `runTask()`, the three direct-execution aliases require workspace-session authentication: Figranium's `/scrape`, `/agent`, and `/headful` routes use `requireAuth`, not API-key authentication. For API-key automation, create a Task and call `runTask()` with a key authorized for `tasks:run` and that Task.
 
