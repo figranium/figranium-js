@@ -190,6 +190,8 @@ Convenience aliases are available at `figranium.runTask()`, `figranium.scrape()`
 
 **Execution listing:** `executions.list()` automatically uses `/api/executions/list` for API-key clients and `/api/executions` for workspace-session clients, matching the server's distinct authentication requirements. Set `apiKeyRoute: true` or `false` only to override that default. Other execution management operations may require a workspace session.
 
+**Task summaries:** `tasks.listSummaries()` uses `/api/tasks/list` with API-key authentication and the session-compatible `/api/tasks` route with `session: true`, returning the same `{ tasks: TaskSummary[] }` shape.
+
 **Authentication and permissions:** Scoped API keys only authorize the Task and execution operations permitted by their scopes and optional Task allowlists. Having an SDK method does not mean the server accepts an API key for it. Cookie-state management, schedule administration, Baserow credentials, 1Password Vault configuration, import/export administration, and Cloud authentication handoff must not be treated as general API-key operations. Use the authenticated Figranium workspace for administrative operations. The SDK does not expose credential, Vault, settings, or Cloud-auth administration resources.
 
 See [docs/API.md](docs/API.md) for the current method index and [examples/basic.ts](examples/basic.ts) for a complete example.
