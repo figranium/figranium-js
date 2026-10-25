@@ -23,9 +23,9 @@ Execution results can report `success`, `error`, `stopped`, `crashed`, or `anti_
 - `tasks.version(id, versionId)`
 - `tasks.clearVersions(id)`
 - `tasks.rollback(id, versionId)`
-- `tasks.generateSelector({ task, actionIndex, prompt })`
-- `tasks.generateScript(description)`
 - `tasks.run(id, input?)`
+
+The former AI-based `tasks.generateSelector()` and `tasks.generateScript()` methods are not available: their server routes are absent in v0.20.0 and v0.21.x.
 
 On Figranium v0.21+, Tasks can reference `cookieStateId` (string for a named state, `null` for fresh, omitted for the instance default). Baserow Task output typing includes `databaseId` and `dedicated`. Scoped keys must have the relevant permissions and respect Task allowlists.
 

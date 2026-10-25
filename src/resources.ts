@@ -92,17 +92,6 @@ export class TasksResource {
     });
   }
 
-  generateSelector(input: { task: Task; actionIndex: number; prompt: string }, options?: RequestOptions) {
-    return this.http.request<{ selector: string }>("POST", "/api/tasks/generate-selector", { ...options, body: input });
-  }
-
-  generateScript(description: string, options?: RequestOptions) {
-    return this.http.request<{ script: string }>("POST", "/api/tasks/generate-script", {
-      ...options,
-      body: { description },
-    });
-  }
-
   run<T = unknown>(id: string, input: ExecuteTaskOptions = {}, options?: RequestOptions) {
     return this.http.request<ExecutionResult<T>>("POST", `/tasks/${pathId(id)}/api`, {
       ...options,
