@@ -64,7 +64,7 @@ export class TasksResource {
   }
 
   update(id: string, patch: Partial<Task>, options?: RequestOptions) {
-    return this.http.request<{ id: string; updatedAt: number; status: string; task: Task }>(
+    return this.http.request<{ id: string; updatedAt: string; status: string; task: Task }>(
       "PATCH",
       `/api/tasks/${pathId(id)}`,
       { ...options, body: patch },
