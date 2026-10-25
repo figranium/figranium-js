@@ -78,3 +78,37 @@ describe("cookie-state timestamp compatibility", () => {
     expect([created, updated]).toEqual([createdAt, updatedAt]);
   });
 });
+
+
+describe("Cabinet response contracts", () => {
+  it("returns the default Cabinet ID and catalog when listing", async () => {
+    const catalog = { defaultCabinetId: "cab_default", cabinets: [{ id: "cab_default", name: "Basic" }] };
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(catalog));
+    const client = new Figranium({ apiKey: "test", fetch: fetcher });
+    const response: { defaultCabinetId: string; cabinets: import("../src").Cabinet[] } = await client.cabinets.list();
+    expect(response).toEqual(catalog);
+    expect(fetcher.mock.calls[0]?.[0]).toBe("http://localhost:11345/api/cabinets");
+  });
+
+  it("returns the updated catalog after deleting a Cabinet", async () => {
+    const catalog = { defaultCabinetId: "cab_default", cabinets: [{ id: "cab_default", name: "Basic" }] };
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(catalog));
+    const client = new Figranium({ session: true, fetch: fetcher });
+    const response: { defaultCabinetId: string; cabinets: import("../src").Cabinet[] } =
+      await client.cabinets.delete("cab/old", { targetCabinetId: "cab_default", migrate: true });
+    expect(response).toEqual(catalog);
+    expect(fetcher.mock.calls[0]?.[0]).toBe("http://localhost:11345/api/cabinets/cab%2Fold");
+    expect(JSON.parse(String(fetcher.mock.calls[0]?.[1]?.body))).toEqual({
+      targetCabinetId: "cab_default", mode: "migrate",
+    });
+  });
+
+  it("returns the extracted folder item rather than an items wrapper", async () => {
+    const folder = { id: "item_2", name: "archive", kind: "folder", status: "unuploaded" };
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(folder));
+    const client = new Figranium({ session: true, fetch: fetcher });
+    const response: import("../src").CabinetItem = await client.cabinets.unzipItem("cab_1", "item_1");
+    expect(response).toEqual(folder);
+    expect(fetcher.mock.calls[0]?.[0]).toBe("http://localhost:11345/api/cabinets/cab_1/items/item_1/unzip");
+  });
+});

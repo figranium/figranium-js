@@ -181,6 +181,8 @@ The `Figranium` instance exposes:
 | `schedules` | Inspect and configure Task schedules (workspace-session authentication required by the server) |
 | `captures` | List and delete recordings and screenshots; no legacy global cookie administration |
 | `cabinets` | Manage download Cabinets and their items |
+
+`cabinets.list()` and `cabinets.delete()` return `{ defaultCabinetId, cabinets }`, not a bare array or a success flag. `cabinets.unzipItem()` returns the extracted `CabinetItem` directly.
 | `cookieStates` | Manage named browser cookie states (workspace session required; mutations also require CSRF protection) |
 | `templates` | Browse, search, and retrieve Templates; record successful imports |
 | `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints (workspace session required) |
