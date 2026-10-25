@@ -37,6 +37,17 @@ describe("Figranium client", () => {
     ]);
   });
 
+  it("retrieves full execution results through the scoped results:read API", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ result: { rows: [{ id: 7 }] } }));
+    const client = new Figranium({ apiKey: "secret", fetch: fetcher });
+
+    const response = await client.executions.getFullResult<{ rows: { id: number }[] }>("run/a ?");
+
+    expect(response.result.rows[0]?.id).toBe(7);
+    expect(fetcher.mock.calls[0]![0]).toBe("http://localhost:11345/api/executions/run%2Fa%20%3F/result");
+    expect(new Headers(fetcher.mock.calls[0]![1]?.headers).get("authorization")).toBe("Bearer secret");
+  });
+
   it("supports x-api-key authentication", async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ status: "ok" }));
     const client = new Figranium({ apiKey: "secret", apiKeyHeader: "x-api-key", fetch: fetcher });
