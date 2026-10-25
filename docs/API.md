@@ -86,7 +86,9 @@ Legacy `captures.cookies()`, `captures.deleteCookie()`, and `captures.clearCooki
 
 Cookie-state management is session-authenticated, and mutations require CSRF protection. Scoped API keys may reference existing cookie states on Tasks but cannot administer states.
 
-## Templates
+## Templates (workspace session required)
+
+The core `/api/templates` endpoints use `requireAuth`. Configure the SDK with `session: true`; scoped API keys cannot list, search, retrieve, or record imports for Templates.
 
 - `templates.list()`
 - `templates.search({ limit?, offset?, sort?, category?, search? })`
