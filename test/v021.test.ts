@@ -82,11 +82,13 @@ describe("cookie-state timestamp compatibility", () => {
 
 describe("Cabinet response contracts", () => {
   it("returns the default Cabinet ID and catalog when listing", async () => {
-    const catalog = { defaultCabinetId: "cab_default", cabinets: [{ id: "cab_default", name: "Basic" }] };
+    const catalog = { defaultCabinetId: "cab_default", cabinets: [{ id: "cab_default", name: "Basic", unuploadedCount: 2 }] };
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(catalog));
     const client = new Figranium({ apiKey: "test", fetch: fetcher });
     const response: { defaultCabinetId: string; cabinets: import("../src").Cabinet[] } = await client.cabinets.list();
     expect(response).toEqual(catalog);
+    const pending: number | undefined = response.cabinets[0]?.unuploadedCount;
+    expect(pending).toBe(2);
     expect(fetcher.mock.calls[0]?.[0]).toBe("http://localhost:11345/api/cabinets");
   });
 
