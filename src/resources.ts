@@ -36,7 +36,17 @@ export class TasksResource {
     return this.http.request<Task[]>("GET", "/api/tasks", options);
   }
 
-  listSummaries(options?: RequestOptions) {
+  listSummaries(options?: RequestOptions): Promise<{ tasks: TaskSummary[] }> {
+    // /api/tasks/list accepts API keys only; workspace sessions use /api/tasks.
+    if (this.http.usesSession) {
+      return this.http.request<Task[]>("GET", "/api/tasks", options).then(tasks => ({
+        tasks: tasks.map(task => ({
+          id: String(task.id),
+          name: task.name || String(task.id),
+          ...(task.description ? { description: task.description } : {}),
+        })),
+      }));
+    }
     return this.http.request<{ tasks: TaskSummary[] }>("GET", "/api/tasks/list", options);
   }
 
