@@ -176,17 +176,17 @@ The `Figranium` instance exposes:
 
 | Resource | Purpose |
 |---|---|
-| `tasks` | Save, update, delete, version, generate, and run Tasks |
+| `tasks` | List, save, update, delete, version, and run Tasks |
 | `executions` | List, inspect, stop, delete, clear, and stream executions |
 | `schedules` | Inspect and configure Task schedules (workspace-session authentication required by the server) |
 | `captures` | List and delete recordings and screenshots; no legacy global cookie administration |
 | `cabinets` | Manage download Cabinets and their items |
 | `cookieStates` | Manage named browser cookie states (workspace session required; mutations also require CSRF protection) |
 | `templates` | Browse, search, and retrieve Templates; record successful imports |
-| `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints |
+| `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints (workspace session required) |
 | `health` | Service health check |
 
-Convenience aliases are available at `figranium.runTask()`, `figranium.scrape()`, `figranium.agent()`, and `figranium.headful()`.
+Convenience aliases are available at `figranium.runTask()`, `figranium.scrape()`, `figranium.agent()`, and `figranium.headful()`. Unlike `runTask()`, the three direct-execution aliases require workspace-session authentication: Figranium's `/scrape`, `/agent`, and `/headful` routes use `requireAuth`, not API-key authentication. For API-key automation, create a Task and call `runTask()` with a key authorized for `tasks:run` and that Task.
 
 **Execution listing:** `executions.list()` automatically uses `/api/executions/list` for API-key clients and `/api/executions` for workspace-session clients, matching the server's distinct authentication requirements. Set `apiKeyRoute: true` or `false` only to override that default. Other execution management operations may require a workspace session.
 
