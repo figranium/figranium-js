@@ -182,7 +182,7 @@ The `Figranium` instance exposes:
 | `captures` | List and delete recordings and screenshots; no legacy global cookie administration |
 | `cabinets` | Manage download Cabinets and their items |
 | `cookieStates` | Manage named browser cookie states (workspace session required; mutations also require CSRF protection) |
-| `templates` | Browse, search, and retrieve Templates; record successful imports |
+| `templates` | Browse, search, and retrieve Templates; record successful imports (workspace session required) |
 | `execution` | Direct `scrape`, `agent`, and `headful` execution endpoints (workspace session required) |
 | `health` | Service health check |
 
