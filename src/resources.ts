@@ -217,7 +217,7 @@ export class CabinetsResource {
   constructor(private readonly http: HttpClient) {}
 
   list(options?: RequestOptions) {
-    return this.http.request<Cabinet[]>("GET", "/api/cabinets", options);
+    return this.http.request<{ defaultCabinetId: string; cabinets: Cabinet[] }>("GET", "/api/cabinets", options);
   }
 
   create(name: string, options?: RequestOptions) {
@@ -229,7 +229,7 @@ export class CabinetsResource {
   }
 
   delete(cabinetId: string, input: { targetCabinetId?: string; migrate?: boolean } = {}, options?: RequestOptions) {
-    return this.http.request<{ success: boolean }>("DELETE", `/api/cabinets/${pathId(cabinetId)}`, {
+    return this.http.request<{ defaultCabinetId: string; cabinets: Cabinet[] }>("DELETE", `/api/cabinets/${pathId(cabinetId)}`, {
       ...options,
       body: { targetCabinetId: input.targetCabinetId, mode: input.migrate ? "migrate" : undefined },
     });
@@ -265,7 +265,7 @@ export class CabinetsResource {
   }
 
   unzipItem(cabinetId: string, itemId: string, options?: RequestOptions) {
-    return this.http.request<{ items: CabinetItem[] }>("POST", `/api/cabinets/${pathId(cabinetId)}/items/${pathId(itemId)}/unzip`, options);
+    return this.http.request<CabinetItem>("POST", `/api/cabinets/${pathId(cabinetId)}/items/${pathId(itemId)}/unzip`, options);
   }
 
   getItemDownloadUrl(cabinetId: string, itemId: string): string {
