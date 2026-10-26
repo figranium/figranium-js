@@ -53,6 +53,19 @@ describe("retired AI Task endpoints", () => {
   });
 });
 
+describe("Task version deletion compatibility", () => {
+  it("uses the session-only DELETE endpoint and encodes Task and version IDs", async () => {
+    const result = { success: true, versionId: "version/2" };
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(result));
+    const client = new Figranium({ session: true, fetch: fetcher });
+    const response: { success: boolean; versionId: string } = await client.tasks.deleteVersion("task/1", "version/2");
+    expect(response).toEqual(result);
+    expect(fetcher.mock.calls[0]?.[0]).toBe("http://localhost:11345/api/tasks/task%2F1/versions/version%2F2");
+    expect(fetcher.mock.calls[0]?.[1]?.method).toBe("DELETE");
+    expect(fetcher.mock.calls[0]?.[1]?.credentials).toBe("include");
+  });
+});
+
 describe("Task PATCH response compatibility", () => {
   it("exposes the server's ISO updatedAt timestamp as a string", async () => {
     const updatedAt = "2026-10-25T12:00:00.000Z";
