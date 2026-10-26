@@ -5,7 +5,6 @@ All notable changes to `@figranium/sdk` are documented here.
 ## 0.7.1 (unreleased)
 
 - Exposed session-only deletion of an individual saved Task version via `tasks.deleteVersion()`.
-
 - Added `cookieStateId` Task typing and serialization for named, default, and fresh cookie-state selection.
 - Added `databaseId` and `dedicated` to typed Baserow Task outputs.
 - Corrected session and API-key routing for Task summaries and execution lists; exposed full execution results with scoped authorization.
