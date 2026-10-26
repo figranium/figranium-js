@@ -2,11 +2,17 @@
 
 All notable changes to `@figranium/sdk` are documented here.
 
-## 0.7.1 - 2026-10-11
+## 0.7.1 (unreleased)
 
-- Added `cookieStateId` Task typing and request serialization coverage for named, default, and fresh cookie-state selection.
-- Added `databaseId` and `dedicated` to typed Baserow Task outputs, with request serialization coverage.
-- Clarified that workspace-only administration remains outside scoped API-key automation clients.
+- Added `cookieStateId` Task typing and serialization for named, default, and fresh cookie-state selection.
+- Added `databaseId` and `dedicated` to typed Baserow Task outputs.
+- Corrected session and API-key routing for Task summaries and execution lists; exposed full execution results with scoped authorization.
+- Fixed Node.js session mutation requests to include a CSRF-compatible header when no Origin or Referer is provided.
+- Corrected Task PATCH and cookie-state timestamp types to match ISO strings returned by the server.
+- Corrected Cabinet catalog, unzip, and unuploaded-count response types.
+- Added the core's `selector` variable type to Task definitions.
+- Removed unsupported AI Task endpoints and clarified nested-field replacement on Task PATCH.
+- Documented session-only template and direct-execution APIs; kept workspace administration outside scoped API-key clients.
 
 ## 0.7.0 - 2026-10-09
 
