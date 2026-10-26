@@ -97,6 +97,8 @@ const result = await figranium.runTask(saved.id!, {
 });
 ```
 
+**Task updates:** `figranium.tasks.update(id, patch)` shallow-merges top-level Task fields. Nested fields such as `actions`, `variables`, and `output` are **replaced in full** when supplied, not merged. When changing one entry inside a nested field, first load the Task and send the complete updated field to avoid clearing other entries.
+
 For Figranium v0.21+, set `cookieStateId` on a Task to reuse an existing named browser cookie state. Set `cookieStateId: null` to run with a fresh state, or omit it to use the instance default. The legacy `statelessExecution` field is deprecated. Cookie-state administration requires an authenticated workspace session; scoped API keys can reference existing states but cannot manage them.
 
 For Baserow Task outputs, `output.databaseId` identifies the database and `output.dedicated` indicates a dedicated table (Figranium v0.21+). These fields are part of the Task payload, not SDK access to Baserow credential or database administration.

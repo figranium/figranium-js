@@ -63,6 +63,11 @@ export class TasksResource {
     return this.http.request<Task>("POST", `/api/tasks/${pathId(id)}/touch`, options);
   }
 
+  /**
+   * Shallow-patch a Task. The server replaces any supplied top-level field in full:
+   * passing `actions`, `variables`, or `output` does not merge its contents.
+   * Include the complete desired value of each such field to avoid data loss.
+   */
   update(id: string, patch: Partial<Task>, options?: RequestOptions) {
     return this.http.request<{ id: string; updatedAt: string; status: string; task: Task }>(
       "PATCH",
