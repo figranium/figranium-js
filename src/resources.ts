@@ -96,6 +96,13 @@ export class TasksResource {
     );
   }
 
+  /** Delete one saved Task version. This route requires a workspace session. */
+  deleteVersion(id: string, versionId: string, options?: RequestOptions) {
+    return this.http.request<{ success: boolean; versionId: string }>(
+      "DELETE", `/api/tasks/${pathId(id)}/versions/${pathId(versionId)}`, options,
+    );
+  }
+
   clearVersions(id: string, options?: RequestOptions) {
     return this.http.request<{ success: boolean }>("POST", `/api/tasks/${pathId(id)}/versions/clear`, options);
   }
