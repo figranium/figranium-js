@@ -5,7 +5,7 @@ export type UnknownRecord = Record<string, unknown>;
 
 export type TaskMode = "scrape" | "agent" | "headful";
 export type TaskOutcome = "success" | "error" | "stopped" | "crashed" | "anti_bot";
-export type VariableType = "string" | "number" | "boolean";
+export type VariableType = "string" | "number" | "boolean" | "selector";
 export type ExtractionFormat = "json" | "csv";
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type CaptchaType = "recaptcha_v2" | "recaptcha_v3" | "hcaptcha" | "turnstile";

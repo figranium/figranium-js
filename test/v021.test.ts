@@ -114,3 +114,20 @@ describe("Cabinet response contracts", () => {
     expect(fetcher.mock.calls[0]?.[0]).toBe("http://localhost:11345/api/cabinets/cab_1/items/item_1/unzip");
   });
 });
+
+
+describe("selector variable compatibility", () => {
+  it("accepts the selector variable type used by the core Task API", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ id: "task_selector" }));
+    const client = new Figranium({ apiKey: "test", fetch: fetcher });
+    const task: Task = {
+      name: "Selector variable", url: "https://example.com", mode: "agent",
+      variables: { target: { type: "selector", value: ".submit" } },
+      actions: [{ type: "if", conditionVar: "target", conditionVarType: "selector", conditionOp: "exists" }],
+    };
+    await client.tasks.save(task);
+    const sent = JSON.parse(String(fetcher.mock.calls[0]?.[1]?.body));
+    expect(sent.variables.target).toEqual({ type: "selector", value: ".submit" });
+    expect(sent.actions[0].conditionVarType).toBe("selector");
+  });
+});
