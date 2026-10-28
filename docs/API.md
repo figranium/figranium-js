@@ -21,6 +21,7 @@ Execution results can report `success`, `error`, `stopped`, `crashed`, or `anti_
 - `tasks.delete(id)`
 - `tasks.versions(id)`
 - `tasks.version(id, versionId)`
+- `tasks.deleteVersion(id, versionId)` — deletes one saved version; requires an authenticated workspace session
 - `tasks.clearVersions(id)`
 - `tasks.rollback(id, versionId)`
 - `tasks.run(id, input?)`
