@@ -32,6 +32,8 @@ The former AI-based `tasks.generateSelector()` and `tasks.generateScript()` meth
 
 On Figranium v0.21+, Tasks can reference `cookieStateId` (string for a named state, `null` for fresh, omitted for the instance default). Baserow Task output typing includes `databaseId` and `dedicated`. Scoped keys must have the relevant permissions and respect Task allowlists.
 
+For selector-based `if`/`while` conditions, set `conditionVarType: "selector"`, `selector: "{$target}"` (or a literal CSS selector), and `conditionOp: "exists"` or `"not_exists"`. Core evaluates `action.selector` for these conditions; `conditionVar` alone is not used and results in a false condition when `selector` is missing.
+
 ## Executions
 
 - `executions.list({ apiKeyRoute? })` — defaults to `/api/executions` with `session: true`, or `/api/executions/list` with an API key; `apiKeyRoute` overrides this selection

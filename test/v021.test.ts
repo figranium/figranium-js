@@ -136,11 +136,13 @@ describe("selector variable compatibility", () => {
     const task: Task = {
       name: "Selector variable", url: "https://example.com", mode: "agent",
       variables: { target: { type: "selector", value: ".submit" } },
-      actions: [{ type: "if", conditionVar: "target", conditionVarType: "selector", conditionOp: "exists" }],
+      actions: [{ type: "if", selector: "{$target}", conditionVarType: "selector", conditionOp: "exists" }],
     };
     await client.tasks.save(task);
     const sent = JSON.parse(String(fetcher.mock.calls[0]?.[1]?.body));
     expect(sent.variables.target).toEqual({ type: "selector", value: ".submit" });
-    expect(sent.actions[0].conditionVarType).toBe("selector");
+    expect(sent.actions[0]).toEqual({
+      type: "if", selector: "{$target}", conditionVarType: "selector", conditionOp: "exists",
+    });
   });
 });
