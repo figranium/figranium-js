@@ -279,6 +279,39 @@ export interface Capture {
   type: "recording" | "screenshot";
 }
 
+/** Permissions accepted by the v0.21 scoped API-key management endpoint. */
+export type ApiKeyPermission = "tasks:read" | "tasks:run" | "tasks:manage";
+
+export interface ScopedApiKey {
+  id: string;
+  name: string;
+  permissions: ApiKeyPermission[];
+  /** Empty means all Tasks, not zero Tasks. */
+  taskIds: string[];
+  createdAt: string;
+  legacy?: boolean;
+}
+
+export interface ApiKeyListResponse {
+  keys: ScopedApiKey[];
+  /** Legacy installations may return their original key; handle as a secret. */
+  legacySecret: string | null;
+  permissions: ApiKeyPermission[];
+}
+
+export interface ApiKeyCreateInput {
+  name?: string;
+  permissions: ApiKeyPermission[];
+  /** Restrict access to these Task IDs. Omit or pass [] for all Tasks. */
+  taskIds?: string[];
+}
+
+export interface ApiKeyCreateResponse {
+  key: ScopedApiKey;
+  /** One-time plaintext secret; the server does not return it on subsequent reads. */
+  secret: string;
+}
+
 export interface Credential {
   id: string;
   name: string;

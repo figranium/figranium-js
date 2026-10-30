@@ -19,6 +19,53 @@ describe("v0.21 session-only resources", () => {
 });
 
 
+describe("v0.21 scoped API-key administration", () => {
+  it("creates Task-allowlisted keys through a workspace session and returns the one-time secret", async () => {
+    const created = {
+      key: { id: "key_1", name: "Runner", permissions: ["tasks:run"], taskIds: ["task_1"], createdAt: "2026-10-30T00:00:00Z" },
+      secret: "one-time-secret",
+    };
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json(created));
+    const client = new Figranium({ session: true, fetch: fetcher });
+    const result = await client.apiKeys.create({ name: "Runner", permissions: ["tasks:run"], taskIds: ["task_1"] });
+    expect(result).toEqual(created);
+    const [url, init] = fetcher.mock.calls[0]!;
+    expect(url).toBe("http://localhost:11345/api/api-keys");
+    expect(init?.method).toBe("POST");
+    expect(init?.credentials).toBe("include");
+    expect(new Headers(init?.headers).get("x-requested-with")).toBe("XMLHttpRequest");
+    expect(JSON.parse(String(init?.body))).toEqual({ name: "Runner", permissions: ["tasks:run"], taskIds: ["task_1"] });
+  });
+
+  it("uses the v0.21 list, rename and revoke response contracts and encodes key IDs", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockImplementation(async (_url, init) => {
+      if (init?.method === "GET") return json({ keys: [], legacySecret: null, permissions: ["tasks:read", "tasks:run", "tasks:manage"] });
+      if (init?.method === "PATCH") return json({ key: { id: "key/1", name: "Updated", permissions: ["tasks:read"], taskIds: [], createdAt: "2026-10-30T00:00:00Z" } });
+      return json({ ok: true });
+    });
+    const client = new Figranium({ session: true, fetch: fetcher });
+    const list = await client.apiKeys.list();
+    expect(list.permissions).toContain("tasks:manage");
+    expect((await client.apiKeys.rename("key/1", "Updated")).key.name).toBe("Updated");
+    expect(await client.apiKeys.revoke("key/1")).toEqual({ ok: true });
+    expect(fetcher.mock.calls.map(([url, init]) => [init?.method, url])).toEqual([
+      ["GET", "http://localhost:11345/api/api-keys"],
+      ["PATCH", "http://localhost:11345/api/api-keys/key%2F1"],
+      ["DELETE", "http://localhost:11345/api/api-keys/key%2F1"],
+    ]);
+  });
+
+  it("rejects API-key and unauthenticated administration before making any request", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ keys: [] }));
+    const client = new Figranium({ apiKey: "scoped-key", fetch: fetcher });
+    await expect(client.apiKeys.list()).rejects.toThrow("requires a workspace session");
+    await expect(client.apiKeys.create({ permissions: ["tasks:manage"] })).rejects.toThrow("requires a workspace session");
+    await expect(client.apiKeys.rename("key_1", "new")).rejects.toThrow("requires a workspace session");
+    await expect(client.apiKeys.revoke("key_1")).rejects.toThrow("requires a workspace session");
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+});
+
 describe("v0.21 Task cookie-state compatibility", () => {
   it("serializes a named state and a fresh-state override", async () => {
     const fetcher = vi.fn<typeof fetch>().mockImplementation(async () => json({ id: "task_1" }));
