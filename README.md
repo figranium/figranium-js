@@ -101,6 +101,25 @@ const result = await figranium.runTask(saved.id!, {
 
 For Figranium v0.21+, set `cookieStateId` on a Task to reuse an existing named browser cookie state. Set `cookieStateId: null` to run with a fresh state, or omit it to use the instance default. The legacy `statelessExecution` field is deprecated. Cookie-state administration requires an authenticated workspace session; scoped API keys can reference existing states but cannot manage them.
 
+### Scoped API keys (v0.21+)
+
+The SDK can administer scoped API keys through an **authenticated workspace session**, not through another API key. Use `session: true` with your existing session cookie (a browser sends same-origin cookies automatically; Node.js callers must provide their session cookie in `headers`):
+
+```ts
+const admin = new Figranium({ session: true, headers: { Cookie: process.env.FIGRANIUM_SESSION_COOKIE! } });
+const { key, secret } = await admin.apiKeys.create({
+  name: "CI runner",
+  permissions: ["tasks:run"],
+  taskIds: ["task_123"],
+});
+// Store secret securely; it is returned only once.
+await admin.apiKeys.rename(key.id, "Production runner");
+const { keys } = await admin.apiKeys.list();
+await admin.apiKeys.revoke(key.id);
+```
+
+`taskIds: []` or an omitted allowlist grants access to **all Tasks** within the selected permissions. Use explicit Task IDs to restrict access. Management calls are rejected locally when the client is configured with an API key instead of a workspace session. The legacy `legacySecret` field in the list response must be treated as sensitive.
+
 For Baserow Task outputs, `output.databaseId` identifies the database and `output.dedicated` indicates a dedicated table (Figranium v0.21+). These fields are part of the Task payload, not SDK access to Baserow credential or database administration.
 
 `variable("query")` produces Figranium’s required `{$query}` syntax. The action helpers generate stable unique action IDs. You can also pass plain typed action objects when you need every field exposed by the task specification.

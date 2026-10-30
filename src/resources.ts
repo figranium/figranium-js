@@ -1,6 +1,10 @@
 import { HttpClient, pathId } from "./http";
 import type {
   BrowserSession,
+  ScopedApiKey,
+  ApiKeyListResponse,
+  ApiKeyCreateInput,
+  ApiKeyCreateResponse,
   BrowserCookieState,
   NamedCookieState,
   Cabinet,
@@ -28,6 +32,38 @@ import type {
   User,
 } from "./types";
 
+/** Scoped API-key administration is available only to authenticated workspace sessions.
+ * API-key credentials cannot create, list, rename, or revoke other API keys.
+ * The secret returned by create() is only available at creation time.
+ */
+export class ApiKeysResource {
+  constructor(private readonly http: HttpClient) {}
+
+  private async sessionRequest<T>(method: string, path: string, options: RequestOptions & { body?: unknown } = {}): Promise<T> {
+    if (!this.http.usesSession) {
+      throw new TypeError("API key administration requires a workspace session");
+    }
+    return this.http.request<T>(method, path, options);
+  }
+
+  list(options?: RequestOptions) {
+    return this.sessionRequest<ApiKeyListResponse>("GET", "/api/api-keys", options);
+  }
+
+  create(input: ApiKeyCreateInput, options?: RequestOptions) {
+    return this.sessionRequest<ApiKeyCreateResponse>("POST", "/api/api-keys", { ...options, body: input });
+  }
+
+  rename(id: string, name: string, options?: RequestOptions) {
+    return this.sessionRequest<{ key: ScopedApiKey }>("PATCH", `/api/api-keys/${pathId(id)}`, {
+      ...options, body: { name },
+    });
+  }
+
+  revoke(id: string, options?: RequestOptions) {
+    return this.sessionRequest<{ ok: boolean }>("DELETE", `/api/api-keys/${pathId(id)}`, options);
+  }
+}
 
 export class TasksResource {
   constructor(private readonly http: HttpClient) {}
