@@ -52,6 +52,8 @@ const figranium = new Figranium({ apiKey: process.env.FIGRANIUM_API_KEY });
 
 `baseUrl` defaults to `http://localhost:11345`. API keys use `Authorization: Bearer` by default, as recommended by Figranium. Set `apiKeyHeader: "x-api-key"` if your deployment expects that header.
 
+For security, HTTP redirects are rejected for API requests and SSE streams rather than followed. This prevents authentication headers (including custom `x-api-key` headers) from being forwarded to another origin. Configure `baseUrl` to the final server URL, and ensure any custom `fetch` implementation honors `redirect: "manual"`. Redirect responses fail with `REDIRECT_NOT_ALLOWED`.
+
 ## CI and command line
 
 The package includes a zero-runtime-dependency CLI for running saved Tasks from CI:

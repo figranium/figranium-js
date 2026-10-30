@@ -50,9 +50,11 @@ export class HttpClient {
         method,
         headers,
         credentials: this.credentials,
+        redirect: "manual",
         signal,
         ...(hasBody ? { body: JSON.stringify(options.body) } : {}),
       });
+      assertNotRedirect(response);
       if (!response.ok) throw await FigraniumError.fromResponse(response);
       if (response.status === 204) return undefined as T;
       const text = await response.text();
@@ -94,8 +96,10 @@ export class HttpClient {
             method: "GET",
             headers,
             credentials: self.credentials,
+            redirect: "manual",
             signal,
           });
+          assertNotRedirect(response);
           if (!response.ok) throw await FigraniumError.fromResponse(response);
           if (!response.body) throw new FigraniumError("Streaming response has no body", { code: "EMPTY_STREAM" });
           yield* parseEventStream<T>(response.body);
@@ -124,6 +128,19 @@ export class HttpClient {
       if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
     }
     return url.toString();
+  }
+}
+
+function assertNotRedirect(response: Response): void {
+  // Fetch follows redirects by default, including forwarding custom x-api-key
+  // headers to a different origin. Never send authentication to a redirect target.
+  // Browsers may expose manual redirects as opaque responses with status 0.
+  if (response.type === "opaqueredirect" || (response.status >= 300 && response.status < 400)) {
+    throw new FigraniumError("Refusing HTTP redirect for a Figranium request", {
+      code: "REDIRECT_NOT_ALLOWED",
+      status: response.status,
+      response,
+    });
   }
 }
 
